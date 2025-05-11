@@ -1,0 +1,23 @@
+valgrind \
+  --tool=memcheck \
+  --leak-check=full \
+  --show-leak-kinds=all \
+  --leak-resolution=high \
+  --show-reachable=yes \
+  --errors-for-leak-kinds=definite,indirect,possible,reachable \
+  --undef-value-errors=yes \
+  --track-origins=yes \
+  --read-var-info=yes \
+  --read-inline-info=yes \
+  --demangle=yes \
+  --partial-loads-ok=no \
+  --child-silent-after-fork=yes \
+  --trace-children=yes \
+  --num-callers=40 \
+  --max-stackframe=8192 \
+  --smc-check=all \
+  --malloc-fill=0xAA \
+  --free-fill=0x55 \
+  --time-stamp=yes \
+  --verbose \
+  ./main > combined_output.txt 2>&1
