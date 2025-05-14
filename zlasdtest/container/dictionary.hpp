@@ -80,7 +80,6 @@ void InsertM(uint & testnum, uint & testerr, lasd::DictionaryContainer<Data> & c
     std::cout << " " << testnum << " (" << testerr << ") Insertion in the dictionary container of the value \"" << val << "\"; ";
     std::cout << "it " << ((tst = con.Insert(std::move(val))) ? "has" : "has not") << " been inserted: ";
     std::cout << ((tst = (tst == chk)) ? "Correct" : "Error") << "!" << std::endl;
-    std::cout << "Correct!" << std::endl;
   }
   catch (std::exception & exc) {
     tst = false;

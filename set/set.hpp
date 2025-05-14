@@ -5,6 +5,7 @@
 /* ************************************************************************** */
 
 #include "../container/dictionary.hpp"
+#include "../container/linear.hpp"
 #include "../container/traversable.hpp"
 
 /* ************************************************************************** */

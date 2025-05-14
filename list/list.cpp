@@ -1,7 +1,6 @@
 
 namespace lasd {
-
-/* ************************************************************************** */
+    /* ************************************************************************** */
 
 template<typename Data>
 bool List<Data>::Node::operator==(const Node& toCompare) const noexcept {
@@ -28,9 +27,8 @@ List<Data>::List(const TraversableContainer<Data>& toCopy) {
 
 template<typename Data>
 List<Data>::List(MappableContainer<Data>&& toMove) noexcept {
-    unsigned long i = 0;
-    toMove.Map([this, &i](Data& value) {
-        this->InsertAtBack(std::move(value)); i++;
+    toMove.Map([this](Data& value) {
+        this->InsertAtBack(std::move(value));
     });
 }
 
@@ -83,6 +81,8 @@ List<Data>& List<Data>::operator=(List&& toMove) noexcept {
 
 template<typename Data>
 bool List<Data>::operator==(const List& toCompare) const noexcept {
+    if(this->size != toCompare.size)
+        return false;
     return *(head) == *(toCompare.head);
 }
 
@@ -121,6 +121,9 @@ void List<Data>::RemoveFromFront() {
     this->head = toDelete->next;
     delete toDelete;
     --this->size;
+    if(this->head == nullptr) {
+        this->tail = nullptr;
+    }
 }
 
 template<typename Data>
@@ -132,6 +135,9 @@ Data List<Data>::FrontNRemove() {
     Data toReturn = toDelete->value;
     delete toDelete;
     --this->size;
+    if(this->head == nullptr) {
+        this->tail = nullptr;
+    }
     return toReturn;
 }
 

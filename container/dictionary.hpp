@@ -4,8 +4,8 @@
 
 /* ************************************************************************** */
 
-#include "testable.hpp"
 #include "mappable.hpp"
+#include "testable.hpp"
 
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ public:
   DictionaryContainer& operator=(const DictionaryContainer&) = delete;
   DictionaryContainer& operator=(DictionaryContainer&&) = delete;
 
-  virtual bool operator==(const DictionaryContainer&) const noexcept = delete;
-  inline virtual bool operator!=(const DictionaryContainer&) const noexcept = delete;
+  bool operator==(const DictionaryContainer&) const noexcept = delete;
+  inline bool operator!=(const DictionaryContainer&) const noexcept = delete;
 
   virtual bool Insert(const Data&) noexcept = 0;
   virtual bool Insert(Data&&) noexcept = 0;
@@ -56,8 +56,8 @@ public:
   OrderedDictionaryContainer& operator=(const OrderedDictionaryContainer&) = delete;
   OrderedDictionaryContainer& operator=(OrderedDictionaryContainer&&) = delete;
 
-  virtual bool operator==(const OrderedDictionaryContainer&) const noexcept = delete;
-  inline virtual bool operator!=(const OrderedDictionaryContainer&) const noexcept = delete;
+  bool operator==(const OrderedDictionaryContainer&) const noexcept = delete;
+  inline bool operator!=(const OrderedDictionaryContainer&) const noexcept = delete;
 
   virtual const Data& Min() const = 0;
   virtual Data MinNRemove() = 0;

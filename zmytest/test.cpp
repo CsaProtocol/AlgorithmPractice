@@ -4,9 +4,11 @@
 
 #include "linear/linear.hpp"
 #include "linear/list/list.hpp"
-#include "setlst/setlst.hpp"
 #include "linear/sortablevector/sortablevector.hpp"
 #include "linear/vector/vector.hpp"
+#include "set/set.hpp"
+#include "set/setlst/setlst.hpp"
+#include "set/setvec/setvec.hpp"
 
 namespace zmytest {
 
@@ -22,6 +24,8 @@ namespace zmytest {
         zMyTestLinear(testnum, testerr);
 
         zMyTestSetLst(testnum, testerr);
+        zMyTestSetVec(testnum, testerr);
+        zMyTestSet(testnum, testerr);
 
 
         testpass = testnum - testerr;

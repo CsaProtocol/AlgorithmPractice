@@ -1,9 +1,12 @@
 
 cc = g++
-cflags = -g -Wall -Wextra -pedantic -O0 -std=c++20
+cflags = -g -Wall -pedantic -O3 -std=c++20 -fsanitize=address
 cflagsextra = -Werror -Wshadow -Wuninitialized -Wconversion -Wsign-compare -D_GLIBCXX_DEBUG -fsanitize=undefined -fno-omit-frame-pointer -Wstrict-aliasing=3 -Wcast-qual -Wcast-align
 
-objects = main.o test.o mytest.o container.o exc1as.o exc1af.o exc1bs.o exc1bf.o zmytestvector.o zmytestsortablevector.o zmytestlist.o zmytestlinear.o zmytestsetlst.o
+## Compiler errors flag - Compiler version 15.1
+cflagsprojectwarning = -ftest-coverage -fprofile-arcs -Wextra -Woverloaded-virtual -Wuninitialized -Wmaybe-uninitialized
+
+objects = main.o test.o mytest.o container.o exc1as.o exc1af.o exc1bs.o exc1bf.o zmytestvector.o zmytestsortablevector.o zmytestlist.o zmytestlinear.o zmytestsetlst.o zmytestsetvec.o zmytestset.o
 
 libcon = container/container.hpp container/testable.hpp container/traversable.hpp container/traversable.cpp container/mappable.hpp container/mappable.cpp container/dictionary.hpp container/dictionary.cpp container/linear.hpp container/linear.cpp
 
@@ -13,13 +16,26 @@ libexc1a = $(libexc) vector/vector.hpp vector/vector.cpp list/list.hpp list/list
 
 libexc1b = $(libexc1a) set/set.hpp set/lst/setlst.hpp set/lst/setlst.cpp set/vec/setvec.hpp set/vec/setvec.cpp
 
+
 all: main
 
+lcov-report: coverage ## Generate lcov report
+	mkdir lcov-report
+	lcov --capture --directory . --output-file lcov-report/coverage.info
+	genhtml lcov-report/coverage.info --output-directory lcov-report
+
+gcovr-report: coverage
+	mkdir gcovr-report
+	gcovr --root . --html --html-details --output gcovr-report/coverage.html
+
+coverage:
+	gcov zmytestvector zmytestsortablevector zmytestlist zmytestlinear zmytestsetlst zmytestsetvec exc1as.o exc1af.o exc1bs.o exc1bf.o main.o
+
 main: $(objects)
-	$(cc) $(cflags) $(cflagsextra) $(objects) -o main
+	$(cc) $(cflags) $(objects) -o main
 
 clean:
-	clear; rm -rfv *.o; rm -fv main
+	clear; rm -rfv *.o; rm -rfv *.gcov; rm -rfv *.gcno; rm -rfv *.gcda; rm -rf gcovr-report/; rm -rf lcov-report/ rm -fv main
 
 main.o: main.cpp
 	$(cc) $(cflags) -c main.cpp
@@ -58,5 +74,11 @@ zmytestlist.o: zmytest/linear/list/list.cpp zmytest/linear/list/list.hpp
 zmytestlinear.o: zmytest/linear/linear.cpp zmytest/linear/linear.hpp
 	$(cc) $(cflags) -c zmytest/linear/linear.cpp -o zmytestlinear.o
 
-zmytestsetlst.o: zmytest/setlst/setlst.cpp zmytest/setlst/setlst.hpp
-	$(cc) $(cflags) -c zmytest/setlst/setlst.cpp -o zmytestsetlst.o
+zmytestsetlst.o: zmytest/set/setlst/setlst.cpp zmytest/set/setlst/setlst.hpp
+	$(cc) $(cflags) -c zmytest/set/setlst/setlst.cpp -o zmytestsetlst.o
+
+zmytestsetvec.o: zmytest/set/setvec/setvec.cpp zmytest/set/setvec/setvec.hpp
+	$(cc) $(cflags) -c zmytest/set/setvec/setvec.cpp -o zmytestsetvec.o
+
+zmytestset.o: zmytest/set/set.hpp zmytest/set/set.cpp
+	$(cc) $(cflags) -c zmytest/set/set.cpp -o zmytestset.o

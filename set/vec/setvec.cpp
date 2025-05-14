@@ -24,7 +24,7 @@ SetVec<Data>::SetVec(const TraversableContainer<Data>& toCopy) : SetVec() {
 
 template<typename Data>
 SetVec<Data>::SetVec(MappableContainer<Data>&& toMove) noexcept : SetVec() {
-    auto functor = [this](Data&& data) {
+    auto functor = [this](Data& data) {
         Insert(std::move(data));
     };
     toMove.Map(functor);
@@ -32,15 +32,9 @@ SetVec<Data>::SetVec(MappableContainer<Data>&& toMove) noexcept : SetVec() {
 
 template<typename Data>
 SetVec<Data>::SetVec(const SetVec& toCopy) {
-    if(toCopy.vec != nullptr) {
-        vec = new Vector<Data>(*(toCopy.vec));
-        head = toCopy.head;
-        size = toCopy.size;
-    } else {
-        vec = new Vector<Data>(defaultSize);
-        head = 0;
-        size = 0;
-    }
+    vec = new Vector<Data>(*(toCopy.vec));
+    head = toCopy.head;
+    size = toCopy.size;
 }
 
 template<typename Data>
@@ -60,15 +54,9 @@ template<typename Data>
 SetVec<Data>& SetVec<Data>::operator=(const SetVec& toCopy) {
     if(this != &toCopy) {
         delete vec;
-        if(toCopy.vec != nullptr) {
-            vec = new Vector<Data>(*(toCopy.vec));
-            head = toCopy.head;
-            size = toCopy.size;
-        } else {
-            vec = new Vector<Data>(defaultSize);
-            head = 0;
-            size = 0;
-        }
+        vec = new Vector<Data>(*(toCopy.vec));
+        head = toCopy.head;
+        size = toCopy.size;
     }
     return *this;
 }
@@ -76,10 +64,6 @@ SetVec<Data>& SetVec<Data>::operator=(const SetVec& toCopy) {
 template<typename Data>
 SetVec<Data>& SetVec<Data>::operator=(SetVec&& toMove) noexcept {
     if(this != &toMove) {
-        delete vec;
-        vec = nullptr;
-        head = 0;
-        size = 0;
         std::swap(vec, toMove.vec);
         std::swap(head, toMove.head);
         std::swap(size, toMove.size);

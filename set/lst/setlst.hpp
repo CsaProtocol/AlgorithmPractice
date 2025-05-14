@@ -23,7 +23,7 @@ protected:
 
   using List<Data>::head;
   using List<Data>::tail;
-
+  using List<Data>::operator[];
 
 public:
 
@@ -34,7 +34,7 @@ public:
   SetLst() = default;
 
   SetLst(const TraversableContainer<Data>&);
-  SetLst(const MappableContainer<Data>&&) noexcept;
+  SetLst(MappableContainer<Data>&&) noexcept;
 
   SetLst(const SetLst&);
   SetLst(SetLst&&) noexcept;
@@ -45,7 +45,7 @@ public:
   SetLst& operator=(SetLst&&) noexcept;
 
   bool operator==(const SetLst&) const noexcept;
-  bool operator!=(const SetLst&) const noexcept;
+  inline bool operator!=(const SetLst&) const noexcept;
 
   const Data& Min() const override;
   Data MinNRemove() override;

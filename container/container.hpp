@@ -27,8 +27,8 @@ public:
   Container& operator=(const Container&) = delete;
   Container& operator=(Container&&) noexcept = delete;
 
-  virtual bool operator==(const Container&) const noexcept = delete;
-  inline virtual bool operator!=(const Container&) const noexcept = delete;
+  bool operator==(const Container&) const noexcept = delete;
+  inline bool operator!=(const Container&) const noexcept = delete;
 
   inline virtual bool Empty() const noexcept { return size == 0; }
   virtual unsigned long Size() const noexcept { return size; }
@@ -48,8 +48,8 @@ public:
   ClearableContainer& operator=(const ClearableContainer&) = delete;
   ClearableContainer& operator=(ClearableContainer&&) noexcept = delete;
 
-  virtual bool operator==(const ClearableContainer&) const noexcept = delete;
-  inline virtual bool operator!=(const ClearableContainer&) const noexcept = delete;
+  bool operator==(const ClearableContainer&) const noexcept = delete;
+  inline bool operator!=(const ClearableContainer&) const noexcept = delete;
 
   virtual void Clear() = 0;
 
@@ -68,8 +68,8 @@ public:
   ResizableContainer& operator=(const ResizableContainer&) = delete;
   ResizableContainer& operator=(ResizableContainer&&) noexcept = delete;
 
-  virtual bool operator==(const ResizableContainer&) const noexcept = delete;
-  inline virtual bool operator!=(const ResizableContainer&) const noexcept = delete;
+  bool operator==(const ResizableContainer&) const noexcept = delete;
+  inline bool operator!=(const ResizableContainer&) const noexcept = delete;
 
   virtual void Resize(unsigned long newSize) = 0;
   inline void Clear() override { Resize(0); }

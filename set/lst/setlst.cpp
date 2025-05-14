@@ -6,16 +6,15 @@ namespace lasd {
 template<typename Data>
 SetLst<Data>::SetLst(const TraversableContainer<Data>& toCopy) {
     auto functor = [&](const Data& data) {
-        Insert(data);
+        this->Insert(data);
     };
     toCopy.Traverse(functor);
 }
 
 template<typename Data>
-SetLst<Data>::SetLst(const MappableContainer<Data>&& toMove) noexcept {
+SetLst<Data>::SetLst(MappableContainer<Data>&& toMove) noexcept {
     auto functor = [&](const Data& data) {
-        Insert(std::move(data));
-        --toMove.size;
+        this->Insert(std::move(data));
     };
     toMove.Map(functor);
 }
@@ -216,7 +215,7 @@ const Data& SetLst<Data>::Successor(const Data& data) const {
         }
         current = current->next;
     }
-    throw std::length_error("Predecessor not found");
+    throw std::length_error("Successor not found");
 }
 
 template<typename Data>
@@ -236,7 +235,7 @@ Data SetLst<Data>::SuccessorNRemove(const Data& data) {
         prev = current;
         current = current->next;
     }
-    throw std::length_error("Predecessor not found");
+    throw std::length_error("Successor not found");
 }
 
 template<typename Data>
@@ -255,7 +254,7 @@ void SetLst<Data>::RemoveSuccessor(const Data& data) {
         prev = current;
         current = current->next;
     }
-    throw std::length_error("Predecessor not found");
+    throw std::length_error("Successor not found");
 }
 
 template<typename Data>

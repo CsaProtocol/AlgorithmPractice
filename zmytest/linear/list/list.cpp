@@ -2,6 +2,7 @@
 #include "../../../list/list.hpp"
 #include "../../../zlasdtest/list/list.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <limits>
 #include <string>
@@ -75,6 +76,66 @@ void zMyTestListInt(unsigned int& testnum, unsigned int& testerr) {
 
     list4.Clear();
     Empty(testnum, testerr, list4, true);
+
+    //Test coverage
+    InsertAtFront(testnum, testerr, list4, true, 1);
+    RemoveFromFront(testnum, testerr, list4, true);
+    Size(testnum, testerr, list4, true, 0);
+    InsertAtBack(testnum, testerr, list4, true, 1);
+    RemoveFromBack(testnum, testerr, list4, true);
+    Size(testnum, testerr, list4, true, 0);
+
+    InsertAtFront(testnum, testerr, list4, true, std::move(1));
+    BackNRemove(testnum, testerr, list4, true, 1);
+    RemoveFromBack(testnum, testerr, list4, false);
+    GetAt(testnum, testerr, list4, false, 0, 1);
+    GetFront(testnum, testerr, list4, false, 1);
+    GetBack(testnum, testerr, list4, false, 1);
+    MapPreOrder(testnum, testerr, list4, true, &MapIncrement<int>);
+    MapPostOrder(testnum, testerr, list4, true, &MapIncrement<int>);
+    TraversePostOrder(testnum, testerr, list4, true, &TraversePrint<int>);
+
+    InsertAtBack(testnum, testerr, list4, true, 1);
+    InsertAtBack(testnum, testerr, list4, true, 2);
+    InsertAtBack(testnum, testerr, list4, true, 3);
+    TraversePreOrder(testnum, testerr, list4, true, &TraversePrint<int>);
+    MapPostOrder(testnum, testerr, list4, true, &MapIncrement<int>);
+    TraversePostOrder(testnum, testerr, list4, true, &TraversePrint<int>);
+    InsertAtFront(testnum, testerr, list4, true, std::move(1));
+    RemoveFromFront(testnum, testerr, list4, true);
+
+    lasd::List<int> list5;
+    EqualList(testnum, testerr, list5, list4, false);
+    NonEqualList(testnum, testerr, list5, list4, true);
+    FrontNRemove(testnum, testerr, list5, false, 1);
+    RemoveFromBack(testnum, testerr, list5, false);
+    BackNRemove(testnum, testerr, list5, false, 1);
+    GetAt(testnum, testerr, list5, false, 0, 1);
+    GetAt(testnum, testerr, list4, true, 1, 3);
+    GetFront(testnum, testerr, list4, true, 2);
+    GetFront(testnum, testerr, list5, false, 1);
+
+    lasd::List<int> list6(std::move(list4));
+    GetFront(testnum, testerr, list6, true, 2);
+    GetAt(testnum, testerr, list6, true, 1, 3);
+
+    list4 = std::move(list6);
+    GetFront(testnum, testerr, list4, true, 2);
+    GetAt(testnum, testerr, list4, true, 1, 3);
+    GetAt(testnum, testerr, list4, true, 2, 4);
+
+    list6.Clear();
+    RemoveFromFront(testnum, testerr, list6, false);
+    RemoveFromBack(testnum, testerr, list6, false);
+    FrontNRemove(testnum, testerr, list6, false, 1);
+    BackNRemove(testnum, testerr, list6, false, 1);
+    TraversePreOrder(testnum, testerr, list6, true, &TraversePrint<int>);
+
+    InsertAtFront(testnum, testerr, list6, true, 1);
+    InsertAtBack(testnum, testerr, list6, true, 2);
+    InsertAtFront(testnum, testerr, list6, true, 3);
+    InsertAtBack(testnum, testerr, list6, true, 4);
+    GetAt(testnum, testerr, list6, true, 3, 4);
 }
 
 void zMyTestListDouble(unsigned int& testnum, unsigned int& testerr) {
@@ -153,6 +214,8 @@ void zMyTestListDouble(unsigned int& testnum, unsigned int& testerr) {
 
     list4.Clear();
     Empty(testnum, testerr, list4, true);
+    InsertAtFront(testnum, testerr, list4, true, 3.14);
+    FrontNRemove(testnum, testerr, list4, true, 3.14);
 }
 
 void zMyTestListString(unsigned int& testnum, unsigned int& testerr) {
@@ -190,7 +253,7 @@ void zMyTestListString(unsigned int& testnum, unsigned int& testerr) {
     Traverse(testnum, testerr, list3, true, &TraversePrint<std::string>);
 
     Map(testnum, testerr, list3, true, [](std::string& s) {
-        for (char& c : s) c = std::toupper(c);
+        std::transform(s.begin(), s.end(), s.begin(), ::toupper);
     });
 
     std::cout << "\nAfter uppercase transformation:" << std::endl;
@@ -224,6 +287,58 @@ void zMyTestListString(unsigned int& testnum, unsigned int& testerr) {
 
     list4.Clear();
     Empty(testnum, testerr, list4, true);
+    InsertAtBack(testnum, testerr, list4, true, std::string("a"));
+    InsertAtBack(testnum, testerr, list4, true, std::string("b"));
+    InsertAtBack(testnum, testerr, list4, true, std::string("c"));
+    GetAt(testnum, testerr, list4, true, 2, std::string("c"));
+}
+
+void zMyTestListCoverage() {
+    lasd::List<int> emptyList;
+    try {
+        emptyList.InsertAtFront(std::move(19));
+        emptyList.RemoveFromFront();
+    } catch(const std::out_of_range& e) {
+        std::cout << "Length error: " << e.what() << std::endl;
+    }
+    try {
+        emptyList.RemoveFromFront();
+    } catch(const std::out_of_range& e) {
+        std::cout << "Length error: " << e.what() << std::endl;
+    }
+    try {
+        emptyList.FrontNRemove();
+    } catch(const std::out_of_range& e) {
+        std::cout << "Length error: " << e.what() << std::endl;
+    }
+    try {
+        emptyList.BackNRemove();
+    } catch(const std::out_of_range& e) {
+        std::cout << "Length error: " << e.what() << std::endl;
+    }
+    try {
+        emptyList.RemoveFromBack();
+    } catch(const std::out_of_range& e) {
+        std::cout << "Out of range error: " << e.what() << std::endl;
+    }
+    try {
+        emptyList[0];
+    } catch(const std::out_of_range& e) {
+        std::cout << "Out of range error: " << e.what() << std::endl;
+    }
+    try {
+        emptyList.InsertAtFront(3);
+        emptyList.InsertAtBack(4);
+        emptyList.InsertAtFront(5);
+        emptyList.InsertAtBack(6);
+        emptyList.InsertAtFront(7);
+        emptyList.InsertAtBack(8);
+        emptyList[0] = 3;
+        emptyList[0] = 2;
+        emptyList[3] = 1;
+    } catch(const std::out_of_range& e) {
+        std::cout << "Length error: " << e.what() << std::endl;
+    }
 }
 
 void zMyTestList(unsigned int& testnum, unsigned int& testerr) {
@@ -247,6 +362,9 @@ void zMyTestList(unsigned int& testnum, unsigned int& testerr) {
     zMyTestListString(testnum, testerr);
     std::cout << "String list tests completed" << std::endl;
 
+    std::cout << "\n[Test 4] Testing List<int> coverage... Expect exceptions" << std::endl;
+    zMyTestListCoverage();
+    std::cout << "----------------------------------------" << std::endl;
     std::cout << "\nAll list tests completed!" << std::endl;
     std::cout << "----------------------------------------" << std::endl;
 }

@@ -41,8 +41,8 @@ public:
   Vector& operator=(const Vector&);
   Vector& operator=(Vector&&) noexcept;
 
-  virtual bool operator==(const Vector&) const noexcept;
-  inline virtual bool operator!=(const Vector&) const noexcept;
+  bool operator==(const Vector&) const noexcept;
+  inline bool operator!=(const Vector&) const noexcept;
 
   Data& operator[](unsigned long) override;
   inline Data& Front() override;

@@ -24,8 +24,8 @@ public:
   TestableContainer& operator=(const TestableContainer&) = delete;
   TestableContainer& operator=(TestableContainer&&) noexcept = delete;
 
-  virtual bool operator==(const TestableContainer&) const noexcept = delete;
-  virtual bool operator!=(const TestableContainer&) const noexcept = delete;
+  bool operator==(const TestableContainer&) const noexcept = delete;
+  inline bool operator!=(const TestableContainer&) const noexcept = delete;
 
   virtual bool Exists(const Data&) const noexcept = 0;
 

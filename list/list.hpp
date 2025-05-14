@@ -34,7 +34,7 @@ protected:
     ~Node() = default;
 
     bool operator==(const Node& toCompare) const noexcept;
-    bool operator!=(const Node& toCompare) const noexcept;
+    inline bool operator!=(const Node& toCompare) const noexcept;
 
   };
 
@@ -58,8 +58,8 @@ public:
   List& operator=(const List&);
   List& operator=(List&&) noexcept;
 
-  virtual bool operator==(const List&) const noexcept;
-  inline virtual bool operator!=(const List&) const noexcept;
+  bool operator==(const List&) const noexcept;
+  inline bool operator!=(const List&) const noexcept;
 
   virtual void InsertAtFront(const Data&);
   virtual void InsertAtFront(Data&&);

@@ -66,6 +66,24 @@ void zMyVectorInt(unsigned int& testnum, unsigned int& testerr) {
     vec1.Clear();
     Empty(testnum, testerr, vec1, true);
     Size(testnum, testerr, vec1, true, 0);
+
+    EqualVector(testnum, testerr, vec1, vec2, false);
+    NonEqualVector(testnum, testerr, vec1, vec2, true);
+    EqualVector(testnum, testerr, vec1, vec1, true);
+    lasd::Vector<int> vec4(1);
+    EqualVector(testnum, testerr, vec1, vec4, false);
+    NonEqualVector(testnum, testerr, vec1, vec4, true);
+
+    vec1.Resize(2);
+    SetAt(testnum, testerr, vec1, true, 0, 1);
+    GetFront(testnum, testerr, vec1, true, 1);
+    SetAt(testnum, testerr, vec1, true, 1, 2);
+    GetBack(testnum, testerr, vec1, true, 2);
+
+    vec1.Clear();
+    Empty(testnum, testerr, vec1, true);
+    GetFront(testnum, testerr, vec1, false, 1);
+    GetBack(testnum, testerr, vec1, false, 2);
 }
 
 void zMyVectorDouble(unsigned int& testnum, unsigned int& testerr) {
@@ -113,11 +131,18 @@ void zMyVectorDouble(unsigned int& testnum, unsigned int& testerr) {
 
     Traverse(testnum, testerr, vec1, true, &TraversePrint<double>);
 
+    lasd::Vector<double> vec5(4);
+    SetAt(testnum, testerr, vec5, true, 0, 1.5);
+    SetAt(testnum, testerr, vec5, true, 1, 2.7);
+    SetAt(testnum, testerr, vec5, true, 2, 3.2);
+    SetAt(testnum, testerr, vec5, true, 3, 4.9);
+
     lasd::TraversableContainer<double>::FoldFun<double> foldfun = [](const double& element, const double& accumulator) -> double {
         return accumulator + element;
     };
-    // Fold(testnum, testerr, vec1, true, foldfun, 0.0, 12.3);
-    // FoldPostOrder(testnum, testerr, vec1, true, foldfun, 0.0, 2.9);
+    Fold(testnum, testerr, vec5, true, foldfun, 0.0, 12.3);
+    Fold(testnum, testerr, vec1, true, foldfun, 0.0, 2.9);
+    FoldPostOrder(testnum, testerr, vec5, true, foldfun, 0.0, 12.3);
 
     vec1.Resize(0);
     Empty(testnum, testerr, vec1, true);
@@ -148,6 +173,25 @@ void zMyVectorDouble(unsigned int& testnum, unsigned int& testerr) {
     vec1.Clear();
     Empty(testnum, testerr, vec1, true);
     Size(testnum, testerr, vec1, true, 0);
+
+    vec2.Resize(3);
+    EqualVector(testnum, testerr, vec1, vec2, false);
+    NonEqualVector(testnum, testerr, vec1, vec2, true);
+    EqualVector(testnum, testerr, vec1, vec1, true);
+    const lasd::Vector<double> vec6(1);
+    EqualVector(testnum, testerr, vec1, vec6, false);
+    NonEqualVector(testnum, testerr, vec1, vec6, true);
+
+    vec1.Resize(2);
+    SetAt(testnum, testerr, vec1, true, 0, 1.0);
+    GetFront(testnum, testerr, vec1, true, 1.0);
+    SetAt(testnum, testerr, vec1, true, 1, 2.0);
+    GetBack(testnum, testerr, vec1, true, 2.0);
+
+    vec1.Clear();
+    Empty(testnum, testerr, vec1, true);
+    GetFront(testnum, testerr, vec1, false, 1.0);
+    GetBack(testnum, testerr, vec1, false, 2.0);
 }
 
 void zMyVectorString(unsigned int& testnum, unsigned int& testerr) {
@@ -210,6 +254,40 @@ void zMyVectorString(unsigned int& testnum, unsigned int& testerr) {
     vec1.Clear();
     Empty(testnum, testerr, vec1, true);
     Size(testnum, testerr, vec1, true, 0);
+
+    EqualVector(testnum, testerr, vec1, vec2, false);
+    NonEqualVector(testnum, testerr, vec1, vec2, true);
+    EqualVector(testnum, testerr, vec1, vec1, true);
+    const lasd::Vector<std::string> vec4(1);
+    EqualVector(testnum, testerr, vec1, vec4, false);
+    NonEqualVector(testnum, testerr, vec1, vec4, true);
+
+    vec1.Resize(2);
+    SetAt(testnum, testerr, vec1, true, 0, std::string("A"));
+    GetFront(testnum, testerr, vec1, true, std::string("A"));
+    SetAt(testnum, testerr, vec1, true, 1, std::string("B"));
+    GetBack(testnum, testerr, vec1, true, std::string("B"));
+
+    lasd::Vector<std::string> vec5(0);
+    Empty(testnum, testerr, vec5, true);
+    GetFront(testnum, testerr, vec5, false, std::string("A"));
+    GetBack(testnum, testerr, vec5, false, std::string("B"));
+}
+
+void zMyTestVectorCoverage() {
+    lasd::Vector<int> emptyVector(0);
+    try {
+        int& frontValue = emptyVector.Front();
+        std::cout << "Front value: " << frontValue << std::endl;
+    } catch(const std::length_error& e) {
+        std::cout << "Non-const Front() exception: " << e.what() << std::endl;
+    }
+    try {
+        int& backValue = emptyVector.Back();
+        std::cout << "Front value: " << backValue << std::endl;
+    } catch(const std::length_error& e) {
+        std::cout << "Non-const Front() exception: " << e.what() << std::endl;
+    }
 }
 
 void zMyTestVector(unsigned int& testnum, unsigned int& testerr) {
@@ -233,6 +311,9 @@ void zMyTestVector(unsigned int& testnum, unsigned int& testerr) {
     std::cout << "- Copy/Move operations" << std::endl;
     zMyVectorString(testnum, testerr);
     std::cout << "String vector tests completed" << std::endl;
+
+    std::cout << "Running coverage tests... (These tests will not be numbered)" << std::endl;
+    zMyTestVectorCoverage();
 
     std::cout << "\nAll vector tests completed!" << std::endl;
     std::cout << "----------------------------------------" << std::endl;

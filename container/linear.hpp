@@ -24,8 +24,8 @@ public:
   LinearContainer& operator=(const LinearContainer&) = delete;
   LinearContainer& operator=(LinearContainer&&) noexcept = delete;
 
-  virtual bool operator==(const LinearContainer&) const noexcept;
-  inline virtual bool operator!=(const LinearContainer&) const noexcept;
+  bool operator==(const LinearContainer&) const noexcept;
+  inline bool operator!=(const LinearContainer&) const noexcept;
 
   virtual const Data& operator[](unsigned long) const = 0;
   inline virtual const Data& Front() const;
@@ -52,6 +52,10 @@ public:
 
   MutableLinearContainer& operator=(const MutableLinearContainer&) = delete;
   MutableLinearContainer& operator=(MutableLinearContainer&&) noexcept = delete;
+
+  using LinearContainer<Data>::operator[];
+  using LinearContainer<Data>::Front;
+  using LinearContainer<Data>::Back;
 
   virtual Data& operator[](unsigned long) = 0;
   inline virtual Data& Front();

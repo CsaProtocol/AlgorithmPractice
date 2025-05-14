@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+#include "container/dictionary.hpp"
 #include "zmytest/test.hpp"
 
 /* ************************************************************************** */
