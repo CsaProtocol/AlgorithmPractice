@@ -2,6 +2,8 @@
 #ifndef TRAVERSABLETEST_HPP
 #define TRAVERSABLETEST_HPP
 
+#include <cmath>
+#include <limits>
 #include "../../container/traversable.hpp"
 
 /* ************************************************************************** */
@@ -93,6 +95,30 @@ void FoldPreOrder(uint & testnum, uint & testerr, const lasd::PreOrderTraversabl
   testerr += (1 - (uint) tst);
 }
 
+// Custom specialization for FoldPreOrder double/float
+template <typename Value>
+bool AreEqual(Value a, Value b, Value epsilon = 0.0000000000000005) {
+  return std::abs(a - b) <= epsilon;
+}
+
+template <typename Data, typename Value>
+requires std::is_floating_point_v<Data>
+void FoldPreOrder(uint & testnum, uint & testerr, const lasd::PreOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
+  bool tst;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing fold in pre order - ";
+    Value val = con.PreOrderFold(fun, inival);
+    std::cout << "obtained value is \"" << val << "\": ";
+    const bool is_equal = AreEqual(val, finval);
+    std::cout << ((tst = ((is_equal) == chk)) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
+
 /* ************************************************************************** */
 
 // PostOrderTraversableContainer member functions!
@@ -127,6 +153,25 @@ void FoldPostOrder(uint & testnum, uint & testerr, const lasd::PostOrderTraversa
   }
   testerr += (1 - (uint) tst);
 }
+
+template <typename Data, typename Value>
+requires std::is_floating_point_v<Data>
+void FoldPostOrder(uint & testnum, uint & testerr, const lasd::PostOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
+  bool tst;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing fold in post order - ";
+    Value val = con.PostOrderFold(fun, inival);
+    std::cout << "obtained value is \"" << val << "\": ";
+    const bool is_equal = AreEqual(val, finval);
+    std::cout << ((tst = ((is_equal) == chk)) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
+
 
 /* ************************************************************************** */
 

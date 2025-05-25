@@ -24,8 +24,9 @@ protected:
     Data value;
     Node* next;
 
-    inline Node(const Data& toInsert) : value(toInsert) { this->next = nullptr; }
-    inline Node(Data&& toInsert) noexcept { std::swap(value, toInsert); this->next = nullptr; }
+    inline Node() : value(), next(nullptr) {}
+    inline Node(const Data& toInsert) : value(toInsert), next(nullptr) {}
+    inline Node(Data&& toInsert) noexcept : value(std::move(toInsert)), next(nullptr) {}
 
     inline Node(const Data& toInsert, Node* toInsertNext) : value(toInsert), next(toInsertNext) {}
 

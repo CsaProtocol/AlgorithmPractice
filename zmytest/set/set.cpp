@@ -262,17 +262,17 @@ void zMySetString(unsigned int& testnum, unsigned int& testerr) {
     InsertAllM(testnum, testerr, set5, false, std::move(vector1));
 
     lasd::SetLst<std::string> set6(set5);
-    Remove(testnum, testerr, set6, true, std::string("case"));
+    Remove(testnum, testerr, set6, false, std::string("case"));
     InsertC(testnum, testerr, set6, true, std::string("newcase"));
     EqualSetLst(testnum, testerr, set5, set6, false);
-    Predecessor(testnum, testerr, set5, true, std::string("zzz"), std::string("string"));
+    Predecessor(testnum, testerr, set5, true, std::string("zzz"), std::string("final"));
     PredecessorNRemove(testnum, testerr, set5, false, std::string(""), std::string(""));
-    PredecessorNRemove(testnum, testerr, set5, true, std::string("zzz"), std::string("string"));
+    PredecessorNRemove(testnum, testerr, set5, true, std::string("zzz"), std::string("final"));
     PredecessorNRemove(testnum, testerr, set5, false, std::string(""), std::string(""));
     RemovePredecessor(testnum, testerr, set5, true, std::string("zzz"));
     Successor(testnum, testerr, set5, false, std::string("aaa"), std::string(""));
-    Remove(testnum, testerr, set5, false, std::string(""));
-    GetAt(testnum, testerr, set5, true, 1, std::string("example"));
+    Remove(testnum, testerr, set5, true, std::string(""));
+    GetAt(testnum, testerr, set5, false, 1, std::string("final"));
     Remove(testnum, testerr, set5, false, std::string("notfound"));
 
     vector1.Resize(10);
@@ -300,7 +300,7 @@ void zMySetString(unsigned int& testnum, unsigned int& testerr) {
 
     Predecessor(testnum, testerr, set8, false, std::string("aaa"), std::string(""));
     PredecessorNRemove(testnum, testerr, set8, false, std::string("aaa"), std::string(""));
-    PredecessorNRemove(testnum, testerr, set8, true, std::string("zzz"), std::string("newstring"));
+    PredecessorNRemove(testnum, testerr, set8, true, std::string("zzz"), std::string("string9"));
 
     Successor(testnum, testerr, set8, false, std::string("zzz"), std::string(""));
     lasd::SetVec<std::string> set10;

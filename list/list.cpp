@@ -1,6 +1,7 @@
 
 namespace lasd {
-    /* ************************************************************************** */
+
+/* ************************************************************************** */
 
 template<typename Data>
 bool List<Data>::Node::operator==(const Node& toCompare) const noexcept {
@@ -116,7 +117,7 @@ void List<Data>::InsertAtFront(Data&& toMove) {
 template<typename Data>
 void List<Data>::RemoveFromFront() {
     if(Empty())
-        throw std::out_of_range("List is empty");
+        throw std::length_error("List is empty");
     Node* toDelete = this->head;
     this->head = toDelete->next;
     delete toDelete;
@@ -129,7 +130,7 @@ void List<Data>::RemoveFromFront() {
 template<typename Data>
 Data List<Data>::FrontNRemove() {
     if(Empty())
-        throw std::out_of_range("List is empty");
+        throw std::length_error("List is empty");
     Node* toDelete = this->head;
     this->head = toDelete->next;
     Data toReturn = toDelete->value;
@@ -172,7 +173,7 @@ void List<Data>::InsertAtBack(Data&& toMove) {
 template <typename Data>
 void List<Data>::RemoveFromBack() {
     if(Empty())
-        throw std::out_of_range("List is empty");
+        throw std::length_error("List is empty");
     if(size == 1) {
         delete this->head;
         this->head = nullptr;
@@ -195,7 +196,7 @@ void List<Data>::RemoveFromBack() {
 template <typename Data>
 Data List<Data>::BackNRemove() {
     if(Empty())
-        throw std::out_of_range("List is empty");
+        throw std::length_error("List is empty");
     if(size == 1) {
         Data toReturn = this->head->value;
         delete this->head;
@@ -220,27 +221,17 @@ Data List<Data>::BackNRemove() {
 
 template<typename Data>
 Data& List<Data>::operator[](unsigned long index) {
-    if(index >= this->size)
-        throw std::out_of_range("Index is out of range");
-    Node* temp = this->head;
-    for(unsigned long i = 0; i < index; ++i) {
-        temp = temp->next;
-    }
-    return temp->value;
+    return const_cast<Data&>(static_cast<const List*>(this)->operator[](index));
 }
 
 template<typename Data>
 Data& List<Data>::Front() {
-    if(this->size == 0)
-        throw std::length_error("List is empty");
-    return this->head->value;
+    return const_cast<Data&>(static_cast<const List*>(this)->Front());
 }
 
 template<typename Data>
 Data& List<Data>::Back() {
-    if(this->size == 0)
-        throw std::length_error("List is empty");
-    return this->tail->value;
+    return const_cast<Data&>(static_cast<const List*>(this)->Back());
 }
 
 template<typename Data>

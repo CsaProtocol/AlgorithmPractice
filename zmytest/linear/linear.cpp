@@ -19,15 +19,14 @@ void zMyLinearInt(unsigned int& testnum, unsigned int& testerr) {
     lasd::SortableVector<int> vec1;
     Empty(testnum, testerr, vec1, true);
 
-    lasd::SortableVector<int> vec2(5);
-    vec1 = vec2;
-    Empty(testnum, testerr, vec1, false);
+    lasd::SortableVector<int> vec2(0);
+    Empty(testnum, testerr, vec1, true);
     EqualVector(testnum, testerr, vec1, vec2, true);
 
     lasd::SortableVector<int> vec3;
     vec2 = vec3;
     Size(testnum, testerr, vec2, true, 0);
-    EqualVector(testnum, testerr, vec1, vec2, false);
+    EqualVector(testnum, testerr, vec1, vec2, true);
     EqualVector(testnum, testerr, vec2, vec3, true);
 
     SetAt(testnum, testerr, vec3, false, 0, 0);
@@ -233,6 +232,21 @@ void zMyLinearInt(unsigned int& testnum, unsigned int& testerr) {
     Traverse(testnum, testerr, vecFromList, true, &TraversePrint<int>); // 0,1,2,3,4
 
     Fold(testnum, testerr, vecFromList, true, [](const int& data, const int& accum) { return accum + data * data; }, 0, 30);
+    Map(testnum, testerr, vecFromList, true, &MapIncrementNPrint<int>);
+    Map(testnum, testerr, vecFromList, true, &MapInvertNPrint<int>);
+
+    lasd::Vector<int> vec;
+    SetAt(testnum, testerr, vec, false, 0, 1);
+    vec.Resize(5);
+    SetAt(testnum, testerr, vec, true, 0, 2);
+    SetAt(testnum, testerr, vec, true, 1, 3);
+    SetAt(testnum, testerr, vec, true, 2, 4);
+    SetAt(testnum, testerr, vec, true, 3, 5);
+    SetAt(testnum, testerr, vec, true, 4, 6);
+    Traverse(testnum, testerr, vec, true, &TraversePrint<int>);
+
+    GetFront(testnum, testerr, vec, true, 2);
+    GetBack(testnum, testerr, vec, true, 6);
 }
 
 void zMyLinearDouble(unsigned int& testnum, unsigned int& testerr) {
@@ -354,6 +368,9 @@ void zMyLinearDouble(unsigned int& testnum, unsigned int& testerr) {
     InsertAtBack(testnum, testerr, lst2, true, 3.3);
     lasd::List lst3(lst2);
     lasd::SortableVector vec9(std::move(lst2));
+    lst2.Clear();
+    InsertAtBack(testnum, testerr, lst2, true, 4.0);
+    InsertAtBack(testnum, testerr, lst2, true, 5.0);
     Traverse(testnum, testerr, lst2, true, &TraversePrint<double>);
     Traverse(testnum, testerr, lst3, true, &TraversePrint<double>);
     NonEqualList(testnum, testerr, lst2, lst3, true);
@@ -382,7 +399,13 @@ void zMyLinearDouble(unsigned int& testnum, unsigned int& testerr) {
     vecDup.Resize(5);
     Size(testnum, testerr, vecDup, true, 5);
 
-    vecDup.Map([](double& i) { i = i * i; });
+    SetAt(testnum, testerr, vecDup, true, 0, 3.3);
+    SetAt(testnum, testerr, vecDup, true, 1, 1.1);
+    SetAt(testnum, testerr, vecDup, true, 2, 2.2);
+    SetAt(testnum, testerr, vecDup, true, 3, 2.2);
+    SetAt(testnum, testerr, vecDup, true, 4, 4.4);
+
+    Map(testnum, testerr, vecDup, true, &MapIncrement<double>);
     Traverse(testnum, testerr, vecDup, true, &TraversePrint<double>);
 
     vecDup.Resize(5);

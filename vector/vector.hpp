@@ -44,13 +44,13 @@ public:
   bool operator==(const Vector&) const noexcept;
   inline bool operator!=(const Vector&) const noexcept;
 
-  Data& operator[](unsigned long) override;
-  inline Data& Front() override;
-  inline Data& Back() override;
-
   const Data& operator[](unsigned long) const override;
   inline const Data& Front() const override;
   inline const Data& Back() const override;
+
+  Data& operator[](unsigned long) override;
+  inline Data& Front() override;
+  inline Data& Back() override;
 
   void Resize(unsigned long) override;
   void Clear() override;

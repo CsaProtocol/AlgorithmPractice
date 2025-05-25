@@ -13,6 +13,13 @@ namespace lasd {
 
 /* ************************************************************************** */
 
+template<typename T>
+concept SimpleType =
+    std::is_trivial_v<std::decay_t<T>> ||
+    std::same_as<std::decay_t<T>, std::string>;
+
+/* ************************************************************************** */
+
 template <typename Data>
 class SetLst : virtual public Set<Data>,
                virtual protected List<Data> {
@@ -78,6 +85,15 @@ protected:
   void DetachAndDelete(typename List<Data>::Node*, typename List<Data>::Node*) noexcept;
   void InsertBetween(typename List<Data>::Node*, const Data&, typename List<Data>::Node*) noexcept;
   void InsertBetween(typename List<Data>::Node*, Data&&, typename List<Data>::Node*) noexcept;
+
+  struct SearchResult {
+    bool found;
+    typename List<Data>::Node* nodePt;
+    typename List<Data>::Node* prevPt;
+    typename List<Data>::Node* prevPredecessor;
+  };
+
+  [[nodiscard]] SearchResult BSearch(const Data&) const noexcept;
 
 };
 

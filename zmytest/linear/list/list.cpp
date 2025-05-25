@@ -298,27 +298,27 @@ void zMyTestListCoverage() {
     try {
         emptyList.InsertAtFront(std::move(19));
         emptyList.RemoveFromFront();
-    } catch(const std::out_of_range& e) {
+    } catch(const std::length_error& e) {
         std::cout << "Length error: " << e.what() << std::endl;
     }
     try {
         emptyList.RemoveFromFront();
-    } catch(const std::out_of_range& e) {
+    } catch(const std::length_error& e) {
         std::cout << "Length error: " << e.what() << std::endl;
     }
     try {
         emptyList.FrontNRemove();
-    } catch(const std::out_of_range& e) {
+    } catch(const std::length_error& e) {
         std::cout << "Length error: " << e.what() << std::endl;
     }
     try {
         emptyList.BackNRemove();
-    } catch(const std::out_of_range& e) {
+    } catch(const std::length_error& e) {
         std::cout << "Length error: " << e.what() << std::endl;
     }
     try {
         emptyList.RemoveFromBack();
-    } catch(const std::out_of_range& e) {
+    } catch(const std::length_error& e) {
         std::cout << "Out of range error: " << e.what() << std::endl;
     }
     try {
@@ -338,6 +338,8 @@ void zMyTestListCoverage() {
         emptyList[3] = 1;
     } catch(const std::out_of_range& e) {
         std::cout << "Length error: " << e.what() << std::endl;
+    } catch (const std::length_error& e) {
+        std::cout << "Length error: " << e.what() << std::endl;
     }
 }
 
@@ -346,19 +348,16 @@ void zMyTestList(unsigned int& testnum, unsigned int& testerr) {
 
     std::cout << "\n[Test 1] Testing List<int>..." << std::endl;
     std::cout << "----------------------------------------" << std::endl;
-    std::cout << "Testing integer list operations:" << std::endl;
     zMyTestListInt(testnum, testerr);
     std::cout << "Integer list tests completed" << std::endl;
 
     std::cout << "\n[Test 2] Testing List<double>..." << std::endl;
     std::cout << "----------------------------------------" << std::endl;
-    std::cout << "Testing double list operations:" << std::endl;
     zMyTestListDouble(testnum, testerr);
     std::cout << "Double list tests completed" << std::endl;
 
     std::cout << "\n[Test 3] Testing List<string>..." << std::endl;
     std::cout << "----------------------------------------" << std::endl;
-    std::cout << "Testing string list operations:" << std::endl;
     zMyTestListString(testnum, testerr);
     std::cout << "String list tests completed" << std::endl;
 

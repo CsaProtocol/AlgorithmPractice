@@ -13,7 +13,7 @@ SetLst<Data>::SetLst(const TraversableContainer<Data>& toCopy) {
 
 template<typename Data>
 SetLst<Data>::SetLst(MappableContainer<Data>&& toMove) noexcept {
-    auto functor = [&](const Data& data) {
+    auto functor = [&](Data& data) {
         this->Insert(std::move(data));
     };
     toMove.Map(functor);
@@ -138,19 +138,12 @@ const Data& SetLst<Data>::Predecessor(const Data& data) const {
     if(Empty()) {
         throw std::length_error("Set is empty");
     }
-    typename List<Data>::Node* current = head;
-    typename List<Data>::Node* prev = nullptr;
-    while(current != nullptr) {
-        if(current->value >= data) {
-            if(prev == nullptr) {
-                throw std::length_error("Predecessor not found");
-            }
-            return prev->value;
-        }
-        prev = current;
-        current = current->next;
+    SearchResult result = BSearch(data);
+    const typename List<Data>::Node* predecessor = result.prevPt;
+    if(predecessor == nullptr) {
+        throw std::length_error("Successor not found");
     }
-    return tail->value;
+    return predecessor->value;
 }
 
 template<typename Data>
@@ -158,25 +151,16 @@ Data SetLst<Data>::PredecessorNRemove(const Data& data) {
     if(Empty()) {
         throw std::length_error("Set is empty");
     }
-    typename List<Data>::Node* current = head;
-    typename List<Data>::Node* prev = nullptr;
-    typename List<Data>::Node* prevPrev = nullptr;
-    while(current != nullptr) {
-        if(current->value >= data) {
-            if(prev == nullptr) {
-                throw std::length_error("Predecessor not found");
-            }
-            Data toReturn = prev->value;
-            this->DetachAndDelete(prev, prevPrev);
-            size--;
-            return toReturn;
-        }
-        prevPrev = prev;
-        prev = current;
-        current = current->next;
+    SearchResult result = BSearch(data);
+    typename List<Data>::Node* predecessor = result.prevPt;
+    typename List<Data>::Node* prev = result.prevPredecessor;
+
+    if(predecessor == nullptr) {
+        throw std::length_error("Successor not found");
     }
-    Data toReturn = tail->value;
-    this->RemoveFromBack();
+    Data toReturn = predecessor->value;
+    this->DetachAndDelete(predecessor, prev);
+    size--;
     return toReturn;
 }
 
@@ -185,22 +169,15 @@ void SetLst<Data>::RemovePredecessor(const Data& data) {
     if(Empty()) {
         throw std::length_error("Set is empty");
     }
-    typename List<Data>::Node* current = head;
-    typename List<Data>::Node* prev = nullptr;
-    typename List<Data>::Node* prevPrev = nullptr;
-    while(current != nullptr) {
-        if(current->value >= data) {
-            if(prev == nullptr) {
-                throw std::length_error("Predecessor not found");
-            }
-            this->DetachAndDelete(prev, prevPrev);
-            size--;
-            return;
-        }
-        prevPrev = prev;
-        prev = current;
-        current = current->next;
-    } this->RemoveFromBack();
+    SearchResult result = BSearch(data);
+    typename List<Data>::Node* predecessor = result.prevPt;
+    typename List<Data>::Node* prev = result.prevPredecessor;
+
+    if(predecessor == nullptr) {
+        throw std::length_error("Successor not found");
+    }
+    this->DetachAndDelete(predecessor, prev);
+    size--;
 }
 
 template<typename Data>
@@ -208,14 +185,12 @@ const Data& SetLst<Data>::Successor(const Data& data) const {
     if(Empty()) {
         throw std::length_error("Set is empty");
     }
-    typename List<Data>::Node* current = head;
-    while(current != nullptr) {
-        if(current->value > data) {
-            return current->value;
-        }
-        current = current->next;
+    SearchResult result = BSearch(data);
+    const typename List<Data>::Node* successor = result.found ? result.nodePt->next : result.nodePt;
+    if(successor == nullptr) {
+        throw std::length_error("Successor not found");
     }
-    throw std::length_error("Successor not found");
+    return successor->value;
 }
 
 template<typename Data>
@@ -223,19 +198,18 @@ Data SetLst<Data>::SuccessorNRemove(const Data& data) {
     if(Empty()) {
         throw std::length_error("Set is empty");
     }
-    typename List<Data>::Node* current = head;
-    typename List<Data>::Node* prev = nullptr;
-    while(current != nullptr) {
-        if(current->value > data) {
-            Data toReturn = current->value;
-            this->DetachAndDelete(current, prev);
-            size--;
-            return toReturn;
-        }
-        prev = current;
-        current = current->next;
+    SearchResult result = BSearch(data);
+
+    typename List<Data>::Node* successor = result.found ? result.nodePt->next : result.nodePt;
+    typename List<Data>::Node* prev = result.found ? result.nodePt : result.prevPt;
+
+    if(successor == nullptr) {
+        throw std::length_error("Successor not found");
     }
-    throw std::length_error("Successor not found");
+    Data toReturn = successor->value;
+    this->DetachAndDelete(successor, prev);
+    size--;
+    return toReturn;
 }
 
 template<typename Data>
@@ -243,18 +217,16 @@ void SetLst<Data>::RemoveSuccessor(const Data& data) {
     if(Empty()) {
         throw std::length_error("Set is empty");
     }
-    typename List<Data>::Node* current = head;
-    typename List<Data>::Node* prev = nullptr;
-    while(current != nullptr) {
-        if(current->value > data) {
-            this->DetachAndDelete(current, prev);
-            size--;
-            return;
-        }
-        prev = current;
-        current = current->next;
+    SearchResult result = BSearch(data);
+
+    typename List<Data>::Node* successor = result.found ? result.nodePt->next : result.nodePt;
+    typename List<Data>::Node* prev = result.found ? result.nodePt : result.prevPt;
+
+    if(successor == nullptr) {
+        throw std::length_error("Successor not found");
     }
-    throw std::length_error("Successor not found");
+    this->DetachAndDelete(successor, prev);
+    size--;
 }
 
 template<typename Data>
@@ -263,24 +235,23 @@ bool SetLst<Data>::Insert(const Data& data) noexcept {
         this->InsertAtFront(data);
         return true;
     }
-    if(Exists(data)) {
+    if(Empty()) {
+        this->InsertAtFront(data);
+        return true;
+    }
+    SearchResult result = BSearch(data);
+    if(result.found) {
         return false;
     }
-    typename List<Data>::Node* current = head;
-    typename List<Data>::Node* prev = nullptr;
-    while(current != nullptr) {
-        if(current->value > data) {
-            if(prev == nullptr) {
-                this->InsertAtFront(data);
-            } else {
-                this->InsertBetween(prev, data, current);
-            }
-            return true;
-        }
-        prev = current;
-        current = current->next;
+    if(result.nodePt == nullptr) {
+        this->InsertAtBack(data);
+        return true;
     }
-    this->InsertAtBack(data);
+    if(result.prevPt == nullptr) {
+        this->InsertAtFront(data);
+        return true;
+    }
+    this->InsertBetween(result.prevPt, data, result.nodePt);
     return true;
 }
 
@@ -290,24 +261,19 @@ bool SetLst<Data>::Insert(Data&& data) noexcept {
         this->InsertAtFront(std::move(data));
         return true;
     }
-    if(Exists(data)) {
+    SearchResult result = BSearch(data);
+    if(result.found) {
         return false;
     }
-    typename List<Data>::Node* current = head;
-    typename List<Data>::Node* prev = nullptr;
-    while(current != nullptr) {
-        if(current->value > data) {
-            if(prev == nullptr) {
-                this->InsertAtFront(data);
-            } else {
-                this->InsertBetween(prev, std::move(data), current);
-            }
-            return true;
-        }
-        prev = current;
-        current = current->next;
+    if(result.nodePt == nullptr) {
+        this->InsertAtBack(std::move(data));
+        return true;
     }
-    this->InsertAtBack(std::move(data));
+    if(result.prevPt == nullptr) {
+        this->InsertAtFront(std::move(data));
+        return true;
+    }
+    this->InsertBetween(result.prevPt, std::move(data), result.nodePt);
     return true;
 }
 
@@ -316,18 +282,10 @@ bool SetLst<Data>::Remove(const Data& data) noexcept {
     if(Empty()) {
         return false;
     }
-    typename List<Data>::Node* current = head;
-    typename List<Data>::Node* prev = nullptr;
-    while(current != nullptr) {
-        if(current->value == data) {
-            this->DetachAndDelete(current, prev);
-            size--;
-            return true;
-        } if(current->value > data) {
-            return false;
-        }
-        prev = current;
-        current = current->next;
+    if(SearchResult result = BSearch(data); result.found) {
+        this->DetachAndDelete(result.nodePt, result.prevPt);
+        size--;
+        return true;
     } return false;
 }
 
@@ -345,6 +303,16 @@ const Data& SetLst<Data>::operator[](const unsigned long index) const {
 
 template<typename Data>
 bool SetLst<Data>::Exists(const Data& data) const noexcept {
+    if(Empty()) {
+        return false;
+    }
+    if(SearchResult result = BSearch(data); result.found) {
+        return true;
+    } return false;
+}
+/*
+template<typename Data>
+bool SetLst<Data>::Exists(const Data& data) const noexcept {
     typename List<Data>::Node* current = head;
     while(current != nullptr) {
         if(current->value == data) {
@@ -355,13 +323,16 @@ bool SetLst<Data>::Exists(const Data& data) const noexcept {
         current = current->next;
     } return false;
 }
+*/
 
 template<typename Data>
 void SetLst<Data>::Clear() {
     this->List<Data>::Clear();
 }
 
-template <typename Data>
+/***************************************** AUXILIARY FUNCTIONS **********************************/
+
+template<typename Data>
 void SetLst<Data>::DetachAndDelete(typename List<Data>::Node* toDelete, typename List<Data>::Node* prev) noexcept {
     if(prev == nullptr) {
         head = toDelete->next;
@@ -374,7 +345,7 @@ void SetLst<Data>::DetachAndDelete(typename List<Data>::Node* toDelete, typename
     delete toDelete;
 }
 
-template <typename Data>
+template<typename Data>
 void SetLst<Data>::InsertBetween(typename List<Data>::Node* prev, const Data& toInsert, typename List<Data>::Node* next) noexcept {
     typename List<Data>::Node* newNode = new typename List<Data>::Node(toInsert);
     newNode->next = next;
@@ -382,7 +353,7 @@ void SetLst<Data>::InsertBetween(typename List<Data>::Node* prev, const Data& to
     size++;
 }
 
-template <typename Data>
+template<typename Data>
 void SetLst<Data>::InsertBetween(typename List<Data>::Node* prev, Data&& toMove, typename List<Data>::Node* next) noexcept {
     typename List<Data>::Node* newNode = new typename List<Data>::Node(std::move(toMove));
     newNode->next = next;
@@ -390,6 +361,46 @@ void SetLst<Data>::InsertBetween(typename List<Data>::Node* prev, Data&& toMove,
     size++;
 }
 
+template<typename Data>
+typename SetLst<Data>::SearchResult SetLst<Data>::BSearch(const Data& data) const noexcept {
+    long low = 0;
+    long high = size - 1;
+
+    while(low <= high) {
+        const long mid = low + (high - low) / 2;
+
+        typename List<Data>::Node* prevPrev = nullptr;
+        typename List<Data>::Node* prev = nullptr;
+        typename List<Data>::Node* midNode = head;
+
+        for(long i = 0; i < mid; i++) {
+            prevPrev = prev;
+            prev = midNode;
+            midNode = midNode->next;
+        }
+        const Data& midVal = midNode->value;
+
+        if(midVal == data) {
+            return {true, midNode, prev, prevPrev};
+        }
+        if(midVal < data) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+
+    typename List<Data>::Node* prev = nullptr;
+    typename List<Data>::Node* toReturn = head;
+    typename List<Data>::Node* prevPrev = nullptr;
+
+    for(long i = 0; i < low; i++) {
+        prevPrev = prev;
+        prev = toReturn;
+        toReturn = toReturn->next;
+    }
+    return {false, toReturn, prev, prevPrev};
+}
 
 /* ************************************************************************** */
 

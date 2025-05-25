@@ -143,30 +143,29 @@ template<typename Data>
 const Data& SetVec<Data>::Predecessor(const Data& value) const {
     if(Empty())
         throw std::length_error("Set is empty");
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) >= value) {
-            if(i == 0)
-                throw std::length_error("Predecessor not found");
-            return vec->operator[](physicalIndex(i - 1));
-        }
-    } return vec->operator[](physicalIndex(this->size - 1));
+
+    BSearchResult result = BSearch(value);
+    const unsigned long predPos = result.pos - 1;
+
+    if(result.pos == 0)
+        throw std::length_error("Predecessor not found");
+
+    return vec->operator[](physicalIndex(predPos));
 }
 
 template<typename Data>
 Data SetVec<Data>::PredecessorNRemove(const Data& value) {
     if(Empty())
         throw std::length_error("Set is empty");
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) >= value) {
-            if(i == 0)
-                throw std::length_error("Predecessor not found");
-            Data predecessor = vec->operator[](physicalIndex(i - 1));
-            RemoveAt(physicalIndex(i - 1));
-            return predecessor;
-        }
-    }
-    Data predecessor = vec->operator[](physicalIndex(this->size - 1));
-    this->RemoveAt(physicalIndex(this->size -1));
+
+    BSearchResult result = BSearch(value);
+    const unsigned long predPos = result.pos - 1;
+
+    if(result.pos == 0)
+        throw std::length_error("Predecessor not found");
+
+    Data predecessor = vec->operator[](physicalIndex(predPos));
+    this->RemoveAt(physicalIndex(predPos));
     return predecessor;
 }
 
@@ -174,50 +173,58 @@ template<typename Data>
 void SetVec<Data>::RemovePredecessor(const Data& value) {
     if(Empty())
         throw std::length_error("Set is empty");
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) >= value) {
-            if(i == 0)
-                throw std::length_error("Predecessor not found");
-            RemoveAt(physicalIndex(i - 1));
-            return;
-        }
-    } this->RemoveAt(physicalIndex(this->size - 1));
+
+    BSearchResult result = BSearch(value);
+    const unsigned long predPos = result.pos - 1;
+
+    if(result.pos == 0)
+        throw std::length_error("Predecessor not found");
+
+    this->RemoveAt(physicalIndex(predPos));
 }
 
 template<typename Data>
 const Data& SetVec<Data>::Successor(const Data& value) const {
     if(Empty())
         throw std::length_error("Set is empty");
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) > value) {
-            return vec->operator[](physicalIndex(i));
-        }
-    } throw std::length_error("Value not found");
+
+    BSearchResult result = BSearch(value);
+    const unsigned long succPos = result.found ? result.pos + 1 : result.pos;
+
+    if(succPos >= size)
+        throw std::length_error("Successor not found");
+
+    return vec->operator[](physicalIndex(succPos));
 }
 
 template<typename Data>
 Data SetVec<Data>::SuccessorNRemove(const Data& value) {
     if(Empty())
         throw std::length_error("Set is empty");
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) > value) {
-            Data successor = vec->operator[](physicalIndex(i));
-            RemoveAt(physicalIndex(i));
-            return successor;
-        }
-    } throw std::length_error("Value not found");
+
+    BSearchResult result = BSearch(value);
+    const unsigned long succPos = result.found ? result.pos + 1 : result.pos;
+
+    if(succPos >= size)
+        throw std::length_error("Successor not found");
+
+    Data successor = vec->operator[](physicalIndex(succPos));
+    RemoveAt(physicalIndex(succPos));
+    return successor;
 }
 
 template<typename Data>
 void SetVec<Data>::RemoveSuccessor(const Data& value) {
     if(Empty())
         throw std::length_error("Set is empty");
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) > value) {
-            RemoveAt(physicalIndex(i));
-            return;
-        }
-    } throw std::length_error("Value not found");
+
+    BSearchResult result = BSearch(value);
+    const unsigned long succPos = result.found ? result.pos + 1 : result.pos;
+
+    if(succPos >= size)
+        throw std::length_error("Successor not found");
+
+    RemoveAt(physicalIndex(succPos));
 }
 
 template<typename Data>
@@ -226,16 +233,15 @@ bool SetVec<Data>::Insert(const Data& value) noexcept {
         InsertAt(0, value);
         return true;
     }
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) == value) {
-            return false;
-        }
-        if(vec->operator[](physicalIndex(i)) > value) {
-            InsertAt(physicalIndex(i), value);
-            return true;
-        }
+    BSearchResult result = BSearch(value);
+    if(result.found == true) {
+        return false;
     }
-    InsertAt(size, value);
+    if(result.pos == size) {
+        InsertAt(result.pos, value);
+        return true;
+    }
+    InsertAt(physicalIndex(result.pos), value);
     return true;
 }
 
@@ -245,16 +251,15 @@ bool SetVec<Data>::Insert(Data&& value) noexcept {
         InsertAt(0, std::move(value));
         return true;
     }
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) == value) {
-            return false;
-        }
-        if(vec->operator[](physicalIndex(i)) > value) {
-            InsertAt(physicalIndex(i), std::move(value));
-            return true;
-        }
+    BSearchResult result = BSearch(value);
+    if(result.found == true) {
+        return false;
     }
-    InsertAt(size, std::move(value));
+    if(result.pos == size) {
+        InsertAt(result.pos, std::move(value));
+        return true;
+    }
+    InsertAt(result.pos, std::move(value));
     return true;
 }
 
@@ -263,23 +268,19 @@ bool SetVec<Data>::Remove(const Data& value) noexcept {
     if(Empty()) {
         return false;
     }
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) == value) {
-            RemoveAt(physicalIndex(i));
-            return true;
-        }
-    }
-    return false;
+    if(BSearchResult result = BSearch(value); result.found) {
+        RemoveAt(physicalIndex(result.pos));
+        return true;
+    } return false;
 }
 
-template <typename Data>
+template<typename Data>
 bool SetVec<Data>::Exists(const Data& value) const noexcept {
     if(Empty())
         return false;
-    for(unsigned long i = 0; i < size; i++) {
-        if(vec->operator[](physicalIndex(i)) == value) {
-            return true;
-        }
+
+    if(BSearchResult result = BSearch(value); result.found) {
+        return true;
     } return false;
 }
 
@@ -338,7 +339,6 @@ void SetVec<Data>::InsertAt(unsigned long physicalindexvalue, Data&& value) noex
     size++;
 }
 
-
 template<typename Data>
 void SetVec<Data>::RemoveAt(unsigned long physicalindexvalue) noexcept {
     for(unsigned long i = physicalindexvalue; i < size; i++) {
@@ -350,6 +350,26 @@ void SetVec<Data>::RemoveAt(unsigned long physicalindexvalue) noexcept {
     }
 }
 
+template<typename Data>
+typename SetVec<Data>::BSearchResult SetVec<Data>::BSearch(const Data& value) const noexcept {
+    long low = 0;
+    long high = size - 1;
+
+    while (low <= high) {
+        const long mid = low + (high - low) / 2;
+        const Data& midVal = vec->operator[](physicalIndex(mid));
+
+        if (midVal == value) {
+            return {true, static_cast<unsigned long>(mid)};
+        }
+        if (midVal < value) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    return {false, static_cast<unsigned long>(low)};
+}
 
 
 }

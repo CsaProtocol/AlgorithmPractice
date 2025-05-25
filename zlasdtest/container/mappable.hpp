@@ -35,7 +35,8 @@ void MapDecrement(Data & dat) {
 
 template <typename Data>
 void MapIncrementNPrint(Data & dat) {
-  std::cout << dat++ << "->" << dat << "; ";
+  Data dat2 = dat++;
+  std::cout << dat << "->" << dat2 << "; ";
 }
 
 template <typename Data>
@@ -50,7 +51,8 @@ void MapHalf(Data & dat) {
 
 template <typename Data>
 void MapDoubleNPrint(Data & dat) {
-  std::cout << dat << "->" << (dat *= 2) << "; ";
+  Data dat2 = dat * 2;
+  std::cout << dat << "->" << dat2 << "; ";
 }
 
 template <typename Data>
@@ -60,7 +62,8 @@ void MapInvert(Data & dat) {
 
 template <typename Data>
 void MapInvertNPrint(Data & dat) {
-  std::cout << dat << "->" << (dat = -dat) << "; ";
+  Data dat2 = -dat;
+  std::cout << dat << "->" << dat2 << "; ";
 }
 
 template <typename Data>

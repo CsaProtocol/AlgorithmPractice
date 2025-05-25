@@ -1,10 +1,11 @@
-FROM ubuntu:22.04
+FROM ubuntu:25.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
+	g++ \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -13,4 +14,4 @@ WORKDIR /app
 COPY . .
 
 # Run make (you can override this at runtime too)
-RUN make > output/output.txt 2>&1
+RUN make > output.txt 2>&1

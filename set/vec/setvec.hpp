@@ -77,10 +77,16 @@ protected:
   void InsertAt(unsigned long, const Data&) noexcept;
   void InsertAt(unsigned long, Data&&) noexcept;
   void RemoveAt(unsigned long) noexcept;
-
   [[nodiscard]] unsigned long physicalIndex(const unsigned long logicalIndex) const {
     return (head + logicalIndex) % vec->Size();
   }
+
+  struct BSearchResult {
+    bool found;
+    unsigned long pos;
+  };
+
+  [[nodiscard]] BSearchResult BSearch(const Data&) const noexcept;
 
 };
 

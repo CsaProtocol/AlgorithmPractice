@@ -193,28 +193,16 @@ void zMyTestSortableVector(unsigned int& testnum, unsigned int& testerr) {
 
     std::cout << "\n[Test 1] Testing SortableVector<int>..." << std::endl;
     std::cout << "----------------------------------------" << std::endl;
-    std::cout << "Testing sortable integer vector operations:" << std::endl;
-    std::cout << "- Sorting functionality" << std::endl;
-    std::cout << "- Duplicate values handling" << std::endl;
-    std::cout << "- Copy/Move operations" << std::endl;
     zMySortableVectorInt(testnum, testerr);
     std::cout << "Sortable integer vector tests completed" << std::endl;
 
     std::cout << "\n[Test 2] Testing SortableVector<double>..." << std::endl;
     std::cout << "----------------------------------------" << std::endl;
-    std::cout << "Testing sortable double vector operations:" << std::endl;
-    std::cout << "- Sorting functionality" << std::endl;
-    std::cout << "- Duplicate and zero values handling" << std::endl;
-    std::cout << "- Copy/Move operations" << std::endl;
     zMySortableVectorDouble(testnum, testerr);
     std::cout << "Sortable double vector tests completed" << std::endl;
 
     std::cout << "\n[Test 3] Testing SortableVector<string>..." << std::endl;
     std::cout << "----------------------------------------" << std::endl;
-    std::cout << "Testing sortable string vector operations:" << std::endl;
-    std::cout << "- Sorting functionality" << std::endl;
-    std::cout << "- Special characters handling" << std::endl;
-    std::cout << "- Copy/Move operations" << std::endl;
     zMySortableVectorString(testnum, testerr);
     std::cout << "Sortable string vector tests completed" << std::endl;
 

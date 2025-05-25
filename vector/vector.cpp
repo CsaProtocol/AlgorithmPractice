@@ -83,27 +83,6 @@ bool Vector<Data>::operator!=(const Vector& toCompare) const noexcept {
     return !(*this == toCompare);
 }
 
-template<typename Data>
-Data& Vector<Data>::operator[](unsigned long index) {
-    if(index >= this->Size())
-        throw std::out_of_range("Index greater than Size.");
-    return this->elements[index];
-}
-
-template<typename Data>
-Data& Vector<Data>::Front() {
-    if(this->Empty())
-        throw std::length_error("Vector is empty.");
-    return this->elements[0];
-}
-
-template<typename Data>
-Data& Vector<Data>::Back() {
-    if(this->Empty())
-        throw std::length_error("Vector is empty.");
-    return this->elements[this->Size() - 1];
-}
-
 template <typename Data>
 const Data& Vector<Data>::operator[](unsigned long index) const {
     if(index >= this->Size())
@@ -123,6 +102,21 @@ const Data& Vector<Data>::Back() const {
     if(this->Empty())
         throw std::length_error("Vector is empty.");
     return this->elements[this->Size() - 1];
+}
+
+template<typename Data>
+Data& Vector<Data>::operator[](unsigned long index) {
+    return const_cast<Data&>(static_cast<const Vector&>(*this)[index]);
+}
+
+template<typename Data>
+Data& Vector<Data>::Front() {
+    return const_cast<Data&>(static_cast<const Vector&>(*this).Front());
+}
+
+template<typename Data>
+Data& Vector<Data>::Back() {
+    return const_cast<Data&>(static_cast<const Vector&>(*this).Back());
 }
 
 template <typename Data>

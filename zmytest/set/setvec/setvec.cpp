@@ -347,6 +347,54 @@ void zMyTestSetVecString(unsigned int& testnum, unsigned int& testerr) {
     InsertC(testnum, testerr, setResize, true, std::string("Four"));
     InsertC(testnum, testerr, setResize, true, std::string("Five"));
     Size(testnum, testerr, setResize, true, 5);
+
+    lasd::SetVec<std::string> set5;
+    InsertC(testnum, testerr, set5, true, std::string("One"));
+    InsertC(testnum, testerr, set5, true, std::string("Two"));
+    InsertC(testnum, testerr, set5, true, std::string("Three"));
+    InsertC(testnum, testerr, set5, true, std::string("Four"));
+    InsertC(testnum, testerr, set5, true, std::string("Five"));
+
+    lasd::SetLst<std::string> setLst;
+    Empty(testnum, testerr, setLst, true);
+    InsertSomeC(testnum, testerr, setLst, true, set5);
+    EqualLinear(testnum, testerr, set5, setLst, true);
+    RemoveAll(testnum, testerr, setLst, true, set5);
+    Empty(testnum, testerr, setLst, true);
+
+    lasd::Vector vec5(set5);
+    EqualLinear(testnum, testerr, set5, vec5, true);
+    set5.Clear();
+    InsertSomeM(testnum, testerr, set5, true, std::move(vec5));
+    EqualLinear(testnum, testerr, set5, vec5, false);
+    vec5.Clear(); vec5.Resize(2);
+    SetAt(testnum, testerr, vec5, true, 0, std::string("Two"));
+    SetAt(testnum, testerr, vec5, true, 1, std::string("Three"));
+    RemoveSome(testnum, testerr, set5, true, vec5);
+
+    lasd::Vector<std::string> vec6(vec5);
+    lasd::LinearContainer<std::string>* linearC = &vec6;
+    std::string front = linearC->Front();
+    if(front == "Two") {
+        std::cout << "Front of empty vector: " << front << std::endl;
+        testnum++;
+    } else {
+        std::cout << "Front of empty vector failed: " << front << std::endl;
+        testnum++;
+        testerr++;
+    }
+
+    std::string back = linearC->Back();
+    if(back == "Three") {
+        std::cout << "Back of empty vector: " << back << std::endl;
+        testnum++;
+    } else {
+        std::cout << "Back of empty vector failed: " << back << std::endl;
+        testnum++;
+        testerr++;
+    }
+
+
 }
     
 void zMyTestSetVec(unsigned int& testnum, unsigned int& testerr) {

@@ -141,7 +141,7 @@ void zMyVectorDouble(unsigned int& testnum, unsigned int& testerr) {
         return accumulator + element;
     };
     Fold(testnum, testerr, vec5, true, foldfun, 0.0, 12.3);
-    Fold(testnum, testerr, vec1, true, foldfun, 0.0, 2.9);
+    FoldPreOrder(testnum, testerr, vec1, true, foldfun, 0.0, 2.9);
     FoldPostOrder(testnum, testerr, vec5, true, foldfun, 0.0, 12.3);
 
     vec1.Resize(0);
@@ -305,14 +305,10 @@ void zMyTestVector(unsigned int& testnum, unsigned int& testerr) {
 
     std::cout << "\n[Test 3] Testing Vector<string>..." << std::endl;
     std::cout << "----------------------------------------" << std::endl;
-    std::cout << "Testing string vector operations:" << std::endl;
-    std::cout << "- Empty/non-empty strings" << std::endl;
-    std::cout << "- String concatenation" << std::endl;
-    std::cout << "- Copy/Move operations" << std::endl;
     zMyVectorString(testnum, testerr);
     std::cout << "String vector tests completed" << std::endl;
 
-    std::cout << "Running coverage tests... (These tests will not be numbered)" << std::endl;
+    std::cout << "Running coverage tests... (These tests will not be numbered - Expect exceptions)" << std::endl;
     zMyTestVectorCoverage();
 
     std::cout << "\nAll vector tests completed!" << std::endl;

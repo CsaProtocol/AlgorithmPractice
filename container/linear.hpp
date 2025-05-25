@@ -79,7 +79,7 @@ public:
   SortableLinearContainer& operator=(const SortableLinearContainer&) = delete;
   SortableLinearContainer& operator=(SortableLinearContainer&&) = delete;
 
-  void Sort() noexcept;
+  virtual void Sort() noexcept;
 
 protected:
 

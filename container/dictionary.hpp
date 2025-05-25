@@ -14,6 +14,11 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
+concept ComparableData = std::totally_ordered<Data>;
+
+/* ************************************************************************** */
+
+template <typename Data>
 class DictionaryContainer : virtual public TestableContainer<Data> {
 
 public:
@@ -45,6 +50,7 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
+  requires ComparableData<Data>
 class OrderedDictionaryContainer : virtual public DictionaryContainer<Data> {
 
 public:
