@@ -60,6 +60,7 @@ public:
 /* ************************************************************************** */
 
 template <typename Data>
+  requires std::totally_ordered<Data>
 class SortableVector : virtual public Vector<Data>,
                        virtual public SortableLinearContainer<Data> {
 

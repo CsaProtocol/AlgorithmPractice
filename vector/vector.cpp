@@ -139,30 +139,37 @@ void Vector<Data>::Clear() {
 // SortableVector
 
 template<typename Data>
+    requires std::totally_ordered<Data>
 SortableVector<Data>::SortableVector(const unsigned long newSize) : Vector<Data>(newSize) {}
 
 template<typename Data>
+    requires std::totally_ordered<Data>
 SortableVector<Data>::SortableVector(const TraversableContainer<Data>& toCopy) : Vector<Data>(toCopy) {}
 
 template<typename Data>
+    requires std::totally_ordered<Data>
 SortableVector<Data>::SortableVector(MappableContainer<Data>&& toMove) noexcept : Vector<Data>(std::move(toMove)) {}
 
 template<typename Data>
+    requires std::totally_ordered<Data>
 SortableVector<Data>::SortableVector(const SortableVector& toCopy) : Vector<Data>(toCopy) {}
 
 template<typename Data>
+    requires std::totally_ordered<Data>
 SortableVector<Data>::SortableVector(SortableVector&& toMove) noexcept {
     std::swap(this->size, toMove.size);
     std::swap(this->elements, toMove.elements);
 }
 
 template <typename Data>
+    requires std::totally_ordered<Data>
 SortableVector<Data>::~SortableVector() {
     delete[] this->elements;
     this->elements = nullptr;
 }
 
 template<typename Data>
+    requires std::totally_ordered<Data>
 SortableVector<Data>& SortableVector<Data>::operator=(const SortableVector& toCopy) {
     this->Resize(toCopy.Size());
     for(unsigned long i = 0; i < toCopy.Size(); i++) {
@@ -172,14 +179,12 @@ SortableVector<Data>& SortableVector<Data>::operator=(const SortableVector& toCo
 }
 
 template <typename Data>
+    requires std::totally_ordered<Data>
 SortableVector<Data>& SortableVector<Data>::operator=(SortableVector&& toMove) noexcept {
     std::swap(this->size, toMove.size);
     std::swap(this->elements, toMove.elements);
     return *this;
 }
-
-
-
 
 /* ************************************************************************** */
 

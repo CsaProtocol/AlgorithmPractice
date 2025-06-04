@@ -3,13 +3,13 @@
 
 namespace lasd {
 
-unsigned long constexpr defaultSize = 5;
+unsigned long constexpr defaultSetVecSize = 5;
 
 /* ************************************************************************** */
 
 template <typename Data>
 SetVec<Data>::SetVec() {
-    vec = new Vector<Data>(defaultSize);
+    vec = new Vector<Data>(defaultSetVecSize);
     head = 0;
     size = 0;
 }
@@ -287,7 +287,7 @@ bool SetVec<Data>::Exists(const Data& value) const noexcept {
 template<typename Data>
 void SetVec<Data>::Clear() {
     delete vec;
-    vec = new Vector<Data>(defaultSize);
+    vec = new Vector<Data>(defaultSetVecSize);
     head = 0;
     size = 0;
 }
@@ -345,8 +345,8 @@ void SetVec<Data>::RemoveAt(unsigned long physicalindexvalue) noexcept {
         vec->operator[](physicalIndex(i)) = vec->operator[](physicalIndex(i + 1));
     }
     size--;
-    if(size < vec->Size() / 4 && vec->Size() > defaultSize) {
-        vec->Resize(std::max(defaultSize, vec->Size() / 2));
+    if(size < vec->Size() / 4 && vec->Size() > defaultSetVecSize) {
+        vec->Resize(std::max(defaultSetVecSize, vec->Size() / 2));
     }
 }
 

@@ -61,6 +61,10 @@ void zMySetInt(unsigned int& testnum, unsigned int& testerr) {
     RemoveSuccessor(testnum, testerr, set5, false, 30);
     Remove(testnum, testerr, set5, false, 30);
 
+    vector1[0] = 10;
+    vector1[1] = 20;
+    vector1[2] = 30;
+
     InsertC(testnum, testerr, set5, true, 10);
     InsertM(testnum, testerr, set5, true, std::move(5));
     InsertAllM(testnum, testerr, set5, false, std::move(vector1));
@@ -158,6 +162,10 @@ void zMySetDouble(unsigned int& testnum, unsigned int& testerr) {
     SuccessorNRemove(testnum, testerr, set5, false, 30.3, 0.0);
     RemoveSuccessor(testnum, testerr, set5, false, 30.3);
     Remove(testnum, testerr, set5, false, 30.3);
+
+    vector1[0] = 10.1;
+    vector1[1] = 20.2;
+    vector1[2] = 30.3;
 
     InsertC(testnum, testerr, set5, true, 10.1);
     InsertM(testnum, testerr, set5, true, std::move(5.3));

@@ -87,6 +87,89 @@ void zMyTestPQHeapInt(unsigned int& testnum, unsigned int& testerr) {
     RemoveTip(testnum, testerr, pqHeap6, true);
     Size(testnum, testerr, pqHeap6, true, 8);
     Tip(testnum, testerr, pqHeap6, true, 11);
+
+    std::cout << "\n[Edge Case 1] Testing empty heap operations..." << std::endl;
+    lasd::PQHeap<int> emptyHeap;
+    Empty(testnum, testerr, emptyHeap, true);
+    Size(testnum, testerr, emptyHeap, true, 0);
+
+    std::cout << "\n[Edge Case 2] Testing duplicate values..." << std::endl;
+    lasd::PQHeap<int> duplicateHeap;
+    Insert(testnum, testerr, duplicateHeap, 5);
+    Insert(testnum, testerr, duplicateHeap, 5);
+    Insert(testnum, testerr, duplicateHeap, 5);
+    Insert(testnum, testerr, duplicateHeap, 5);
+    Size(testnum, testerr, duplicateHeap, true, 4);
+    TipNRemove(testnum, testerr, duplicateHeap, true, 5);
+    TipNRemove(testnum, testerr, duplicateHeap, true, 5);
+    TipNRemove(testnum, testerr, duplicateHeap, true, 5);
+    TipNRemove(testnum, testerr, duplicateHeap, true, 5);
+    Empty(testnum, testerr, duplicateHeap, true);
+
+    std::cout << "\n[Edge Case 3] Testing negative values..." << std::endl;
+    lasd::PQHeap<int> negativeHeap;
+    Insert(testnum, testerr, negativeHeap, -5);
+    Insert(testnum, testerr, negativeHeap, -10);
+    Insert(testnum, testerr, negativeHeap, -3);
+    Insert(testnum, testerr, negativeHeap, -7);
+    Size(testnum, testerr, negativeHeap, true, 4);
+    TipNRemove(testnum, testerr, negativeHeap, true, -3);
+    TipNRemove(testnum, testerr, negativeHeap, true, -5);
+    TipNRemove(testnum, testerr, negativeHeap, true, -7);
+    TipNRemove(testnum, testerr, negativeHeap, true, -10);
+    Empty(testnum, testerr, negativeHeap, true);
+
+    std::cout << "\n[Edge Case 4] Testing resize with many elements..." << std::endl;
+    lasd::PQHeap<int> resizeHeap;
+    for (int i = 0; i < 100; i++) {
+        Insert(testnum, testerr, resizeHeap, i);
+    }
+    Size(testnum, testerr, resizeHeap, true, 100);
+    Tip(testnum, testerr, resizeHeap, true, 99);
+
+    std::cout << "\n[Edge Case 5] Testing Heapify with unordered vector..." << std::endl;
+    lasd::Vector<int> unsortedVec(10);
+    SetAt(testnum, testerr, unsortedVec, true, 0, 4);
+    SetAt(testnum, testerr, unsortedVec, true, 1, 2);
+    SetAt(testnum, testerr, unsortedVec, true, 2, 8);
+    SetAt(testnum, testerr, unsortedVec, true, 3, 1);
+    SetAt(testnum, testerr, unsortedVec, true, 4, 6);
+    SetAt(testnum, testerr, unsortedVec, true, 5, 3);
+    SetAt(testnum, testerr, unsortedVec, true, 6, 9);
+    SetAt(testnum, testerr, unsortedVec, true, 7, 5);
+    SetAt(testnum, testerr, unsortedVec, true, 8, 7);
+    SetAt(testnum, testerr, unsortedVec, true, 9, 0);
+
+    lasd::PQHeap<int> unsortedHeap(unsortedVec);
+    Size(testnum, testerr, unsortedHeap, true, 10);
+    TipNRemove(testnum, testerr, unsortedHeap, true, 9);
+    TipNRemove(testnum, testerr, unsortedHeap, true, 8);
+    TipNRemove(testnum, testerr, unsortedHeap, true, 7);
+
+    std::cout << "\n[Edge Case 6] Testing assignment of empty heap..." << std::endl;
+    lasd::PQHeap<int> emptyHeap2;
+    lasd::PQHeap<int> nonEmptyHeap;
+    Insert(testnum, testerr, nonEmptyHeap, 1);
+    Insert(testnum, testerr, nonEmptyHeap, 2);
+
+    nonEmptyHeap = emptyHeap2;
+    Empty(testnum, testerr, nonEmptyHeap, true);
+    Size(testnum, testerr, nonEmptyHeap, true, 0);
+
+    std::cout << "\n[Edge Case 7] Testing Change with no order change..." << std::endl;
+    lasd::PQHeap<int> changeHeap;
+    Insert(testnum, testerr, changeHeap, 10);
+    Insert(testnum, testerr, changeHeap, 5);
+    Insert(testnum, testerr, changeHeap, 7);
+
+    // Change a value to the same value
+    Change(testnum, testerr, changeHeap, 0, 10);
+    Tip(testnum, testerr, changeHeap, true, 10);
+
+    // Change to a value that doesn't affect heap order
+    Change(testnum, testerr, changeHeap, 1, 6);
+    TipNRemove(testnum, testerr, changeHeap, true, 10);
+    Tip(testnum, testerr, changeHeap, true, 7);
 }
 
 void zMyTestPQHeapDouble(unsigned int& testnum, unsigned int& testerr) {

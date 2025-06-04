@@ -1,14 +1,12 @@
 
 namespace lasd {
 
-unsigned long constexpr defaultSize = 5;
-
 /* ************************************************************************** */
 
 template<typename Data>
     requires std::totally_ordered<Data>
 HeapVec<Data>::HeapVec(const TraversableContainer<Data>& container) {
-    vec = new Vector<Data>(container);
+    vec = new SortableVector<Data>(container);
     size = container.Size();
     HeapVec::Heapify();
 }
@@ -16,7 +14,7 @@ HeapVec<Data>::HeapVec(const TraversableContainer<Data>& container) {
 template<typename Data>
     requires std::totally_ordered<Data>
 HeapVec<Data>::HeapVec(MappableContainer<Data>&& container) noexcept {
-    vec = new Vector<Data>(std::move(container));
+    vec = new SortableVector<Data>(std::move(container));
     size = container.Size();
     HeapVec::Heapify();
 }
@@ -24,7 +22,7 @@ HeapVec<Data>::HeapVec(MappableContainer<Data>&& container) noexcept {
 template<typename Data>
     requires std::totally_ordered<Data>
 HeapVec<Data>::HeapVec(const HeapVec& other) {
-    vec = new Vector<Data>(*(other.vec));
+    vec = new SortableVector<Data>(*(other.vec));
     size = other.size;
 }
 
@@ -46,7 +44,7 @@ template<typename Data>
 HeapVec<Data>& HeapVec<Data>::operator=(const HeapVec& other) {
     if (this != &other) {
         delete vec;
-        vec = new Vector<Data>(*(other.vec));
+        vec = new SortableVector<Data>(*(other.vec));
         size = other.size;
     }
     return *this;
@@ -85,7 +83,7 @@ template<typename Data>
     requires std::totally_ordered<Data>
 void HeapVec<Data>::Clear() {
     delete vec;
-    vec = new Vector<Data>(defaultSize);
+    vec = new SortableVector<Data>(defaultHeapVecSize);
     size = 0;
 }
 
@@ -137,6 +135,29 @@ void HeapVec<Data>::Sort() noexcept {
 template<typename Data>
     requires std::totally_ordered<Data>
 void HeapVec<Data>::HeapifyDown(unsigned long index) noexcept {
+    while(true) {
+        unsigned long maxIndex = index;
+        unsigned long left = leftChild(index);
+        unsigned long right = rightChild(index);
+
+        if(left < size && vec->operator[](left) > vec->operator[](maxIndex)) {
+            maxIndex = left;
+        }
+        if(right < size && vec->operator[](right) > vec->operator[](maxIndex)) {
+            maxIndex = right;
+        }
+        if(maxIndex == index) {
+            break;
+        }
+        std::swap(vec->operator[](index), vec->operator[](maxIndex));
+        index = maxIndex;
+    }
+}
+
+//Recursive version of HeapifyDown
+/*template<typename Data>
+    requires std::totally_ordered<Data>
+void HeapVec<Data>::HeapifyDown(unsigned long index) noexcept {
     unsigned long maxIndex = index;
     unsigned long left = leftChild(index);
     unsigned long right = rightChild(index);
@@ -151,7 +172,7 @@ void HeapVec<Data>::HeapifyDown(unsigned long index) noexcept {
         std::swap(vec->operator[](index), vec->operator[](maxIndex));
         HeapifyDown(maxIndex);
     }
-}
+}*/
 
 template<typename Data>
     requires std::totally_ordered<Data>
@@ -170,7 +191,7 @@ void HeapVec<Data>::HeapSort() {
     for (long long i = size - 1; i > 0; --i) {
         std::swap(vec->operator[](0), vec->operator[](i));
         --size;
-        Heapify();
+        HeapifyDown(0);
     }
     size = sizeToSave;
 }

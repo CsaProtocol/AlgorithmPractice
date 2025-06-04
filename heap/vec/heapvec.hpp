@@ -19,9 +19,8 @@ class HeapVec : virtual public Heap<Data> {
 protected:
 
   using Container::size;
-  Vector<Data>* vec = nullptr;
-
-  Data& operator[](unsigned long) override;
+  SortableVector<Data>* vec = nullptr;
+  static constexpr unsigned long defaultHeapVecSize = 16;
 
 public:
 
@@ -43,6 +42,7 @@ public:
   void Clear() override;
 
   const Data& operator[](unsigned long) const override;
+  Data& operator[](unsigned long) override;
 
   bool IsHeap() const noexcept override;
   void Heapify() override;
@@ -51,13 +51,13 @@ public:
 
 protected:
 
-  [[nodiscard]] static inline unsigned long parent(const unsigned long index) noexcept {
+  [[nodiscard]] static constexpr unsigned long parent(const unsigned long index) noexcept {
     return (index - 1) / 2;
   }
-  [[nodiscard]] static inline unsigned long leftChild(const unsigned long index) noexcept {
+  [[nodiscard]] static constexpr unsigned long leftChild(const unsigned long index) noexcept {
     return 2 * index + 1;
   }
-  [[nodiscard]] static inline unsigned long rightChild(const unsigned long index) noexcept {
+  [[nodiscard]] static constexpr unsigned long rightChild(const unsigned long index) noexcept {
     return 2 * index + 2;
   }
 

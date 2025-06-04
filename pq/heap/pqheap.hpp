@@ -22,6 +22,14 @@ protected:
   using Container::size;
   using HeapVec<Data>::vec;
 
+  using HeapVec<Data>::IsHeap;
+  using HeapVec<Data>::Heapify;
+  using HeapVec<Data>::Sort;
+
+  Data& operator[](unsigned long index) override {
+    return HeapVec<Data>::operator[](index);
+  }
+
 public:
 
   PQHeap();
@@ -37,6 +45,14 @@ public:
   PQHeap& operator=(const PQHeap&);
   PQHeap& operator=(PQHeap&&) noexcept;
 
+  using HeapVec<Data>::operator==;
+  using HeapVec<Data>::operator!=;
+  using HeapVec<Data>::Clear;
+
+  const Data& operator[](unsigned long index) const override {
+    return HeapVec<Data>::operator[](index);
+  }
+
   const Data& Tip() const override;
   void RemoveTip() override;
   Data TipNRemove() override;
@@ -49,7 +65,9 @@ public:
 
 protected:
 
-  // Auxiliary functions, if necessary!
+  template<typename InsertableData>
+    requires std::totally_ordered<InsertableData>
+  void InsertImpl(InsertableData&&) noexcept;
 
 };
 

@@ -6,7 +6,7 @@ namespace lasd {
 template<typename Data>
     requires std::totally_ordered<Data>
 PQHeap<Data>::PQHeap() {
-    vec = new Vector<Data>;
+    vec = new SortableVector<Data>;
     size = 0;
 }
 
@@ -34,8 +34,9 @@ template<typename Data>
     requires std::totally_ordered<Data>
 PQHeap<Data>& PQHeap<Data>::operator=(const PQHeap& toCopy) {
     if (this != &toCopy) {
+        SortableVector<Data>* newVec = new SortableVector<Data>(*(toCopy.vec));
         delete vec;
-        vec = new Vector<Data>(*(toCopy.vec));
+        vec = newVec;
         size = toCopy.size;
     }
     return *this;
@@ -68,6 +69,9 @@ void PQHeap<Data>::RemoveTip() {
     }
     std::swap(vec->operator[](0), vec->operator[](size - 1));
     --size;
+    if(size < vec->Size() / 4 && vec->Size() > HeapVec<Data>::defaultHeapVecSize) {
+        vec->Resize(std::max(HeapVec<Data>::defaultHeapVecSize, vec->Size() / 2));
+    }
     this->HeapifyDown(0);
 }
 
@@ -87,23 +91,19 @@ Data PQHeap<Data>::TipNRemove() {
 template<typename Data>
     requires std::totally_ordered<Data>
 void PQHeap<Data>::Insert(const Data& value) noexcept {
-    if(size == vec->Size()) {
+    InsertImpl(const_cast<Data&>(value));
+    /*if(size == vec->Size()) {
         vec->Resize(vec->Size() == 0 ? 1 : vec->Size() * 2);
     }
     vec->operator[](this->size) = value;
     ++size;
-    this->HeapifyUp(size - 1);
+    this->HeapifyUp(size - 1);*/
 }
 
 template<typename Data>
     requires std::totally_ordered<Data>
 void PQHeap<Data>::Insert(Data&& value) noexcept {
-    if(size == vec->Size()) {
-        vec->Resize(vec->Size() == 0 ? 1 : vec->Size() * 2);
-    }
-    std::swap(vec->operator[](this->size), value);
-    ++size;
-    this->HeapifyUp(size - 1);
+    InsertImpl(std::move(value));
 }
 
 template<typename Data>
@@ -136,6 +136,17 @@ void PQHeap<Data>::Change(unsigned long index, Data&& value) {
     }
 }
 
+template<typename Data>
+    requires std::totally_ordered<Data>
+template<typename InsertableData>
+    requires std::totally_ordered<InsertableData>
+void PQHeap<Data>::InsertImpl(InsertableData&& value) noexcept {
+    if(size == vec->Size()) {
+        vec->Resize(vec->Size() == 0 ? 1 : vec->Size() * 2);
+    }
+    vec->operator[](size++) = std::forward<Data>(value);
+    this->HeapifyUp(size - 1);
+}
 
 
 

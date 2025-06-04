@@ -26,7 +26,9 @@ protected:
 
     inline Node() : value(), next(nullptr) {}
     inline Node(const Data& toInsert) : value(toInsert), next(nullptr) {}
-    inline Node(Data&& toInsert) noexcept : value(std::move(toInsert)), next(nullptr) {}
+    inline Node(Data&& toInsert) noexcept : next(nullptr) {
+      std::swap(value, toInsert);
+    }
 
     inline Node(const Data& toInsert, Node* toInsertNext) : value(toInsert), next(toInsertNext) {}
 

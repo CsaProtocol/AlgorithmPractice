@@ -69,6 +69,7 @@ public:
 };
 
 template <typename Data>
+  requires std::totally_ordered<Data>
 class SortableLinearContainer : public virtual MutableLinearContainer<Data> {
 
 public:
