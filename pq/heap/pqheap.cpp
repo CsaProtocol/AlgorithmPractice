@@ -67,12 +67,7 @@ void PQHeap<Data>::RemoveTip() {
     if (size == 0) {
         throw std::length_error("Heap is empty");
     }
-    std::swap(vec->operator[](0), vec->operator[](size - 1));
-    --size;
-    if(size < vec->Size() / 4 && vec->Size() > HeapVec<Data>::defaultHeapVecSize) {
-        vec->Resize(std::max(HeapVec<Data>::defaultHeapVecSize, vec->Size() / 2));
-    }
-    this->HeapifyDown(0);
+    RemoveTipAux();
 }
 
 template<typename Data>
@@ -82,9 +77,7 @@ Data PQHeap<Data>::TipNRemove() {
         throw std::length_error("Heap is empty");
     }
     Data tip = vec->operator[](0);
-    std::swap(vec->operator[](0), vec->operator[](size - 1));
-    --size;
-    this->HeapifyDown(0);
+    RemoveTipAux();
     return tip;
 }
 
@@ -92,12 +85,6 @@ template<typename Data>
     requires std::totally_ordered<Data>
 void PQHeap<Data>::Insert(const Data& value) noexcept {
     InsertImpl(const_cast<Data&>(value));
-    /*if(size == vec->Size()) {
-        vec->Resize(vec->Size() == 0 ? 1 : vec->Size() * 2);
-    }
-    vec->operator[](this->size) = value;
-    ++size;
-    this->HeapifyUp(size - 1);*/
 }
 
 template<typename Data>
@@ -139,13 +126,23 @@ void PQHeap<Data>::Change(unsigned long index, Data&& value) {
 template<typename Data>
     requires std::totally_ordered<Data>
 template<typename InsertableData>
-    requires std::totally_ordered<InsertableData>
-void PQHeap<Data>::InsertImpl(InsertableData&& value) noexcept {
+void PQHeap<Data>::InsertImpl(InsertableData&& value) {
     if(size == vec->Size()) {
         vec->Resize(vec->Size() == 0 ? 1 : vec->Size() * 2);
     }
-    vec->operator[](size++) = std::forward<Data>(value);
+    vec->operator[](size++) = std::forward<InsertableData>(value);
     this->HeapifyUp(size - 1);
+}
+
+template<typename Data>
+    requires std::totally_ordered<Data>
+void PQHeap<Data>::RemoveTipAux() noexcept {
+    std::swap(vec->operator[](0), vec->operator[](size - 1));
+    --size;
+    if(vec->Size() > HeapVec<Data>::defaultHeapVecSize && size < vec->Size() / 4) {
+        vec->Resize(std::max(HeapVec<Data>::defaultHeapVecSize, vec->Size() / 2));
+    }
+    this->HeapifyDown(0);
 }
 
 

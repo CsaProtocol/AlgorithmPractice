@@ -295,7 +295,7 @@ void SetVec<Data>::Clear() {
 template<typename Data>
 void SetVec<Data>::Resize(unsigned long newSize) {
     Vector<Data>* newVec = new Vector<Data>(newSize);
-    unsigned long maxloop = std::min(newSize, size);
+    const unsigned long maxloop = std::min(newSize, size);
     for(unsigned long i = 0; i < maxloop; i++) {
         newVec->operator[](i) = vec->operator[](physicalIndex(i));
     }
@@ -340,7 +340,7 @@ void SetVec<Data>::InsertAt(unsigned long physicalindexvalue, Data&& value) noex
 }
 
 template<typename Data>
-void SetVec<Data>::RemoveAt(unsigned long physicalindexvalue) noexcept {
+void SetVec<Data>::RemoveAt(const unsigned long physicalindexvalue) noexcept {
     for(unsigned long i = physicalindexvalue; i < size; i++) {
         vec->operator[](physicalIndex(i)) = vec->operator[](physicalIndex(i + 1));
     }

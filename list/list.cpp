@@ -220,7 +220,7 @@ Data List<Data>::BackNRemove() {
 }
 
 template<typename Data>
-Data& List<Data>::operator[](unsigned long index) {
+Data& List<Data>::operator[](const unsigned long index) {
     return const_cast<Data&>(static_cast<const List*>(this)->operator[](index));
 }
 

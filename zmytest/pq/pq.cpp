@@ -1,14 +1,16 @@
 #include "pq.hpp"
 #include "../../zlasdtest/pq/pq.hpp"
 
-#include "../../zlasdtest/container/linear.hpp"
+#include <climits>
 #include "../../pq/heap/pqheap.hpp"
 #include "../../zlasdtest/container/container.hpp"
+#include "../../zlasdtest/container/linear.hpp"
 #include "../../zlasdtest/container/traversable.hpp"
 
 namespace zmytest {
 
 void zMyTestPQHeapInt(unsigned int& testnum, unsigned int& testerr) {
+
     lasd::Vector<int> vec(10);
     SetAt(testnum, testerr, vec, true, 0, 0);
     SetAt(testnum, testerr, vec, true, 1, 1);
@@ -35,8 +37,8 @@ void zMyTestPQHeapInt(unsigned int& testnum, unsigned int& testerr) {
     Insert(testnum, testerr, pqHeap, 13);
     Size(testnum, testerr, pqHeap, true, 12);
 
-    Change(testnum, testerr, pqHeap, 4, 20);
-    Change(testnum, testerr, pqHeap, 5, 21);
+    Change(testnum, testerr, pqHeap, true, 4, 20);
+    Change(testnum, testerr, pqHeap, true, 5, 21);
     Tip(testnum, testerr, pqHeap, true, 21);
 
     lasd::PQHeap pqHeap2(std::move(vec));
@@ -126,6 +128,11 @@ void zMyTestPQHeapInt(unsigned int& testnum, unsigned int& testerr) {
     }
     Size(testnum, testerr, resizeHeap, true, 100);
     Tip(testnum, testerr, resizeHeap, true, 99);
+    for(int i = 99; i >= 0; --i) {
+        TipNRemove(testnum, testerr, resizeHeap, true, i);
+    }
+    Size(testnum, testerr, resizeHeap, true, 0);
+
 
     std::cout << "\n[Edge Case 5] Testing Heapify with unordered vector..." << std::endl;
     lasd::Vector<int> unsortedVec(10);
@@ -162,14 +169,95 @@ void zMyTestPQHeapInt(unsigned int& testnum, unsigned int& testerr) {
     Insert(testnum, testerr, changeHeap, 5);
     Insert(testnum, testerr, changeHeap, 7);
 
-    // Change a value to the same value
-    Change(testnum, testerr, changeHeap, 0, 10);
+    Change(testnum, testerr, changeHeap, true, 0, 10);
     Tip(testnum, testerr, changeHeap, true, 10);
 
-    // Change to a value that doesn't affect heap order
-    Change(testnum, testerr, changeHeap, 1, 6);
+    Change(testnum, testerr, changeHeap, true, 1, 6);
     TipNRemove(testnum, testerr, changeHeap, true, 10);
     Tip(testnum, testerr, changeHeap, true, 7);
+
+    std::cout << "\n[Edge Case 8] Testing extreme values..." << std::endl;
+    lasd::PQHeap<int> extremeHeap;
+    Insert(testnum, testerr, extremeHeap, INT_MAX);
+    Insert(testnum, testerr, extremeHeap, INT_MIN);
+    Insert(testnum, testerr, extremeHeap, 0);
+    Size(testnum, testerr, extremeHeap, true, 3);
+    TipNRemove(testnum, testerr, extremeHeap, true, INT_MAX);
+    TipNRemove(testnum, testerr, extremeHeap, true, 0);
+    TipNRemove(testnum, testerr, extremeHeap, true, INT_MIN);
+    Empty(testnum, testerr, extremeHeap, true);
+
+    std::cout << "\n[Edge Case 9] Testing change with extreme value updates..." << std::endl;
+    lasd::PQHeap<int> extremeChangeHeap;
+    Insert(testnum, testerr, extremeChangeHeap, 10);
+    Insert(testnum, testerr, extremeChangeHeap, 20);
+    Insert(testnum, testerr, extremeChangeHeap, 30);
+
+    Change(testnum, testerr, extremeChangeHeap, true, 1, INT_MAX);
+    Tip(testnum, testerr, extremeChangeHeap, true, INT_MAX);
+
+    Change(testnum, testerr, extremeChangeHeap, true, 2, INT_MIN);
+    TipNRemove(testnum, testerr, extremeChangeHeap, true, INT_MAX);
+    TipNRemove(testnum, testerr, extremeChangeHeap, true, 30);
+    TipNRemove(testnum, testerr, extremeChangeHeap, true, INT_MIN);
+    Empty(testnum, testerr, extremeChangeHeap, true);
+
+    std::cout << "\n[Edge Case 10] Testing Insert after RemoveTip when empty..." << std::endl;
+    lasd::PQHeap<int> emptyThenFillHeap;
+    Insert(testnum, testerr, emptyThenFillHeap, 5);
+    TipNRemove(testnum, testerr, emptyThenFillHeap, true, 5);
+    Empty(testnum, testerr, emptyThenFillHeap, true);
+
+    Insert(testnum, testerr, emptyThenFillHeap, 10);
+    Insert(testnum, testerr, emptyThenFillHeap, 20);
+    Size(testnum, testerr, emptyThenFillHeap, true, 2);
+    TipNRemove(testnum, testerr, emptyThenFillHeap, true, 20);
+    TipNRemove(testnum, testerr, emptyThenFillHeap, true, 10);
+    Empty(testnum, testerr, emptyThenFillHeap, true);
+
+    std::cout << "\n[Edge Case 11] Testing equality operator (==)..." << std::endl;
+    lasd::PQHeap<int> eqHeap1;
+    lasd::PQHeap<int> eqHeap2;
+
+    EqualLinear(testnum, testerr, eqHeap1, eqHeap2, true);
+
+    Insert(testnum, testerr, eqHeap1, 5);
+    Insert(testnum, testerr, eqHeap1, 10);
+    Insert(testnum, testerr, eqHeap1, 15);
+
+    Insert(testnum, testerr, eqHeap2, 5);
+    Insert(testnum, testerr, eqHeap2, 10);
+    Insert(testnum, testerr, eqHeap2, 15);
+
+    EqualLinear(testnum, testerr, eqHeap1, eqHeap2, true);
+
+    Insert(testnum, testerr, eqHeap1, 20);
+    EqualLinear(testnum, testerr, eqHeap1, eqHeap2, false);
+
+    Insert(testnum, testerr, eqHeap2, 25);
+    EqualLinear(testnum, testerr, eqHeap1, eqHeap2, false);
+
+    RemoveTip(testnum, testerr, eqHeap1, true);
+    RemoveTip(testnum, testerr, eqHeap2, true);
+    EqualLinear(testnum, testerr, eqHeap1, eqHeap2, true);
+
+    std::cout << "\n[Edge Case 12] Testing equality with different insertion order..." << std::endl;
+    lasd::PQHeap<int> diffOrderHeap1;
+    lasd::PQHeap<int> diffOrderHeap2;
+
+    Insert(testnum, testerr, diffOrderHeap1, 30);
+    Insert(testnum, testerr, diffOrderHeap1, 20);
+    Insert(testnum, testerr, diffOrderHeap1, 10);
+
+    Insert(testnum, testerr, diffOrderHeap2, 10);
+    Insert(testnum, testerr, diffOrderHeap2, 20);
+    Insert(testnum, testerr, diffOrderHeap2, 30);
+
+    EqualLinear(testnum, testerr, diffOrderHeap1, diffOrderHeap2, false);
+
+    RemoveTip(testnum, testerr, diffOrderHeap1, true);
+    RemoveTip(testnum, testerr, diffOrderHeap2, true);
+    EqualLinear(testnum, testerr, diffOrderHeap1, diffOrderHeap2, true);
 }
 
 void zMyTestPQHeapDouble(unsigned int& testnum, unsigned int& testerr) {
@@ -199,8 +287,8 @@ void zMyTestPQHeapDouble(unsigned int& testnum, unsigned int& testerr) {
     Insert(testnum, testerr, pqHeap, 13.5);
     Size(testnum, testerr, pqHeap, true, 12);
 
-    Change(testnum, testerr, pqHeap, 4, 20.5);
-    Change(testnum, testerr, pqHeap, 5, 21.5);
+    Change(testnum, testerr, pqHeap, true, 4, 20.5);
+    Change(testnum, testerr, pqHeap, true, 5, 21.5);
     Tip(testnum, testerr, pqHeap, true, 21.5);
 
     lasd::PQHeap pqHeap2(std::move(vec));
@@ -251,6 +339,53 @@ void zMyTestPQHeapDouble(unsigned int& testnum, unsigned int& testerr) {
     RemoveTip(testnum, testerr, pqHeap6, true);
     Size(testnum, testerr, pqHeap6, true, 8);
     Tip(testnum, testerr, pqHeap6, true, 11.5);
+
+    std::cout << "\n[Edge Case 13] Testing equality operator with doubles..." << std::endl;
+    lasd::PQHeap<double> eqDoubleHeap1;
+    lasd::PQHeap<double> eqDoubleHeap2;
+
+    EqualLinear(testnum, testerr, eqDoubleHeap1, eqDoubleHeap2, true);
+
+    Insert(testnum, testerr, eqDoubleHeap1, 3.14);
+    Insert(testnum, testerr, eqDoubleHeap1, 2.71);
+    Insert(testnum, testerr, eqDoubleHeap1, 1.618);
+
+    Insert(testnum, testerr, eqDoubleHeap2, 1.618);
+    Insert(testnum, testerr, eqDoubleHeap2, 3.14);
+    Insert(testnum, testerr, eqDoubleHeap2, 2.71);
+
+    EqualLinear(testnum, testerr, eqDoubleHeap1, eqDoubleHeap2, false);
+
+    Change(testnum, testerr, eqDoubleHeap1, true, 0, 4.20);
+    EqualLinear(testnum, testerr, eqDoubleHeap1, eqDoubleHeap2, false);
+
+    std::cout << "\n[Edge Case 14] Testing equality after operations..." << std::endl;
+    lasd::PQHeap<double> opHeap1;
+    lasd::PQHeap<double> opHeap2;
+
+    Insert(testnum, testerr, opHeap1, 10.5);
+    Insert(testnum, testerr, opHeap1, 20.5);
+    Insert(testnum, testerr, opHeap1, 30.5);
+    RemoveTip(testnum, testerr, opHeap1, true);
+    Insert(testnum, testerr, opHeap1, 15.5);
+
+    Insert(testnum, testerr, opHeap2, 20.5);
+    Insert(testnum, testerr, opHeap2, 10.5);
+    Insert(testnum, testerr, opHeap2, 15.5);
+
+    EqualLinear(testnum, testerr, opHeap1, opHeap2, true);
+
+    std::cout << "\n[Edge Case 15] Testing equality with floating-point precision issues..." << std::endl;
+    lasd::PQHeap<double> precHeap1;
+    lasd::PQHeap<double> precHeap2;
+
+    Insert(testnum, testerr, precHeap1, 1.0000001);
+    Insert(testnum, testerr, precHeap1, 2.0000001);
+
+    Insert(testnum, testerr, precHeap2, 1.0000002);
+    Insert(testnum, testerr, precHeap2, 2.0000002);
+
+    EqualLinear(testnum, testerr, precHeap1, precHeap2, false);
 }
 
 void zMyTestPQHeapString(unsigned int& testnum, unsigned int& testerr) {
@@ -280,8 +415,8 @@ void zMyTestPQHeapString(unsigned int& testnum, unsigned int& testerr) {
     Insert(testnum, testerr, pqHeap, std::string("pear"));
     Size(testnum, testerr, pqHeap, true, 12);
 
-    Change(testnum, testerr, pqHeap, 4, std::string("watermelon"));
-    Change(testnum, testerr, pqHeap, 5, std::string("zucchini"));
+    Change(testnum, testerr, pqHeap, true, 4, std::string("watermelon"));
+    Change(testnum, testerr, pqHeap, true, 5, std::string("zucchini"));
     Tip(testnum, testerr, pqHeap, true, std::string("zucchini"));
 
     lasd::PQHeap pqHeap2(std::move(vec));
@@ -332,6 +467,52 @@ void zMyTestPQHeapString(unsigned int& testnum, unsigned int& testerr) {
     RemoveTip(testnum, testerr, pqHeap6, true);
     Size(testnum, testerr, pqHeap6, true, 8);
     Tip(testnum, testerr, pqHeap6, true, std::string("nectarine"));
+
+    std::cout << "\n[Edge Case 16] Testing equality operator with strings..." << std::endl;
+    lasd::PQHeap<std::string> eqStrHeap1;
+    lasd::PQHeap<std::string> eqStrHeap2;
+
+    EqualLinear(testnum, testerr, eqStrHeap1, eqStrHeap2, true);
+
+    Insert(testnum, testerr, eqStrHeap1, std::string("cat"));
+    Insert(testnum, testerr, eqStrHeap1, std::string("dog"));
+    Insert(testnum, testerr, eqStrHeap1, std::string("bird"));
+
+    Insert(testnum, testerr, eqStrHeap2, std::string("bird"));
+    Insert(testnum, testerr, eqStrHeap2, std::string("cat"));
+    Insert(testnum, testerr, eqStrHeap2, std::string("dog"));
+
+    EqualLinear(testnum, testerr, eqStrHeap1, eqStrHeap2, false);
+
+    Insert(testnum, testerr, eqStrHeap1, std::string("elephant"));
+    EqualLinear(testnum, testerr, eqStrHeap1, eqStrHeap2, false);
+
+    std::cout << "\n[Edge Case 17] Testing equality with case sensitivity..." << std::endl;
+    lasd::PQHeap<std::string> caseHeap1;
+    lasd::PQHeap<std::string> caseHeap2;
+
+    Insert(testnum, testerr, caseHeap1, std::string("Apple"));
+    Insert(testnum, testerr, caseHeap1, std::string("Banana"));
+
+    Insert(testnum, testerr, caseHeap2, std::string("apple"));
+    Insert(testnum, testerr, caseHeap2, std::string("banana"));
+
+    EqualLinear(testnum, testerr, caseHeap1, caseHeap2, false);
+
+    std::cout << "\n[Edge Case 18] Testing equality with empty strings..." << std::endl;
+    lasd::PQHeap<std::string> emptyStrHeap1;
+    lasd::PQHeap<std::string> emptyStrHeap2;
+
+    Insert(testnum, testerr, emptyStrHeap1, std::string(""));
+    Insert(testnum, testerr, emptyStrHeap1, std::string("test"));
+
+    Insert(testnum, testerr, emptyStrHeap2, std::string(""));
+    Insert(testnum, testerr, emptyStrHeap2, std::string("test"));
+
+    EqualLinear(testnum, testerr, emptyStrHeap1, emptyStrHeap2, true);
+
+    Change(testnum, testerr, emptyStrHeap1, true, 0, std::string("changed"));
+    EqualLinear(testnum, testerr, emptyStrHeap1, emptyStrHeap2, false);
 }
 
 void zMyTestPQHeapCoverage() {

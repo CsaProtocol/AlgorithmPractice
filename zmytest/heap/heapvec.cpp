@@ -250,6 +250,129 @@ void zMyTestHeapVecString(unsigned int& testnum, unsigned int& testerr) {
     Size(testnum, testerr, heapVec5, true, 10);
 }
 
+void zMyTestHeapVecEdgeCases(unsigned int& testnum, unsigned int& testerr) {
+    std::cout << "\n[Test 4] Testing HeapVec Edge Cases..." << std::endl;
+    std::cout << "----------------------------------------" << std::endl;
+
+    // Edge Case 1: Empty heap
+    std::cout << "Edge Case 1: Empty heap" << std::endl;
+    lasd::HeapVec<int> emptyHeap;
+    Size(testnum, testerr, emptyHeap, true, 0);
+    Empty(testnum, testerr, emptyHeap, true);
+    IsHeap(testnum, testerr, emptyHeap, true); // Empty heap is a valid heap
+
+    // Try operations on empty heap
+    emptyHeap.Heapify(); // Should do nothing
+    emptyHeap.Sort();    // Should do nothing
+    IsHeap(testnum, testerr, emptyHeap, true);
+
+    // Edge Case 2: Heap with a single element
+    std::cout << "Edge Case 2: Heap with a single element" << std::endl;
+    lasd::Vector<int> singleElementVec(1);
+    SetAt(testnum, testerr, singleElementVec, true, 0, 42);
+
+    lasd::HeapVec<int> singleElementHeap(singleElementVec);
+    Size(testnum, testerr, singleElementHeap, true, 1);
+    IsHeap(testnum, testerr, singleElementHeap, true); // Single element heap is always a valid heap
+    GetAt(testnum, testerr, singleElementHeap, true, 0, 42);
+
+    singleElementHeap.Sort();
+    GetAt(testnum, testerr, singleElementHeap, true, 0, 42); // Should remain unchanged
+    IsHeap(testnum, testerr, singleElementHeap, true); // Single element heap is still a valid heap after sort
+
+    // Edge Case 3: Heap with duplicate elements
+    std::cout << "Edge Case 3: Heap with duplicate elements" << std::endl;
+    lasd::Vector<int> dupVec(5);
+    SetAt(testnum, testerr, dupVec, true, 0, 10);
+    SetAt(testnum, testerr, dupVec, true, 1, 10);
+    SetAt(testnum, testerr, dupVec, true, 2, 5);
+    SetAt(testnum, testerr, dupVec, true, 3, 5);
+    SetAt(testnum, testerr, dupVec, true, 4, 10);
+
+    lasd::HeapVec<int> dupHeap(dupVec);
+    IsHeap(testnum, testerr, dupHeap, true);
+    Size(testnum, testerr, dupHeap, true, 5);
+
+    dupHeap.Sort();
+    GetAt(testnum, testerr, dupHeap, true, 0, 5);
+    GetAt(testnum, testerr, dupHeap, true, 1, 5);
+    GetAt(testnum, testerr, dupHeap, true, 2, 10);
+    GetAt(testnum, testerr, dupHeap, true, 3, 10);
+    GetAt(testnum, testerr, dupHeap, true, 4, 10);
+
+    dupHeap.Heapify();
+    IsHeap(testnum, testerr, dupHeap, true);
+
+    std::cout << "Edge Case 4: Already sorted collections" << std::endl;
+    lasd::Vector<int> ascVec(5);
+    for (int i = 0; i < 5; i++) {
+        SetAt(testnum, testerr, ascVec, true, i, i + 1);
+    }
+
+    lasd::HeapVec<int> ascHeap(ascVec);
+    IsHeap(testnum, testerr, ascHeap, true);
+    ascHeap.Sort();
+    for (int i = 0; i < 5; i++) {
+        GetAt(testnum, testerr, ascHeap, true, i, i + 1);
+    }
+
+    lasd::Vector<int> descVec(5);
+    for (int i = 0; i < 5; i++) {
+        SetAt(testnum, testerr, descVec, true, i, 5 - i);
+    }
+
+    lasd::HeapVec<int> descHeap(descVec);
+    IsHeap(testnum, testerr, descHeap, true);
+    descHeap.Sort();
+    for (int i = 0; i < 5; i++) {
+        GetAt(testnum, testerr, descHeap, true, i, i + 1);
+    }
+
+    // Edge Case 5: Heap with negative values
+    std::cout << "Edge Case 5: Heap with negative values" << std::endl;
+    lasd::Vector<int> negVec(5);
+    SetAt(testnum, testerr, negVec, true, 0, -5);
+    SetAt(testnum, testerr, negVec, true, 1, -10);
+    SetAt(testnum, testerr, negVec, true, 2, -3);
+    SetAt(testnum, testerr, negVec, true, 3, -7);
+    SetAt(testnum, testerr, negVec, true, 4, -1);
+
+    lasd::HeapVec<int> negHeap(negVec);
+    IsHeap(testnum, testerr, negHeap, true);
+
+    negHeap.Sort();
+    GetAt(testnum, testerr, negHeap, true, 0, -10);
+    GetAt(testnum, testerr, negHeap, true, 1, -7);
+    GetAt(testnum, testerr, negHeap, true, 2, -5);
+    GetAt(testnum, testerr, negHeap, true, 3, -3);
+    GetAt(testnum, testerr, negHeap, true, 4, -1);
+
+    negHeap.Heapify();
+    IsHeap(testnum, testerr, negHeap, true);
+
+    // Edge Case 6: Copy from heap to empty heap
+    std::cout << "Edge Case 6: Copy from heap to empty heap" << std::endl;
+    lasd::HeapVec<int> emptyDestHeap;
+    emptyDestHeap = negHeap;
+    EqualLinear(testnum, testerr, negHeap, emptyDestHeap, true);
+    IsHeap(testnum, testerr, emptyDestHeap, true);
+
+    std::cout << "Edge Case 7: Clear and emptiness check" << std::endl;
+    lasd::HeapVec<int> heapToClear(negVec);
+    Size(testnum, testerr, heapToClear, true, 5);
+    heapToClear.Clear();
+    Size(testnum, testerr, heapToClear, true, 0);
+    Empty(testnum, testerr, heapToClear, true);
+
+    std::cout << "Edge Case 8: Create heap from empty container" << std::endl;
+    lasd::Vector<int> emptyVec(0);
+    lasd::HeapVec<int> heapFromEmpty(emptyVec);
+    Size(testnum, testerr, heapFromEmpty, true, 0);
+    IsHeap(testnum, testerr, heapFromEmpty, true);
+
+    std::cout << "Edge case tests completed" << std::endl;
+}
+
 void zMyTestHeapVec(unsigned int& testnum, unsigned int& testerr) {
     std::cout << "\n~*~#~*~ Test HeapVec Container ~*~#~*~ " << std::endl;
 
@@ -267,6 +390,11 @@ void zMyTestHeapVec(unsigned int& testnum, unsigned int& testerr) {
     std::cout << "----------------------------------------" << std::endl;
     zMyTestHeapVecString(testnum, testerr);
     std::cout << "String heap tests completed" << std::endl;
+
+    std::cout << "\n[Test 4] Testing HeapVec edge cases..." << std::endl;
+    std::cout << "----------------------------------------" << std::endl;
+    zMyTestHeapVecEdgeCases(testnum, testerr);
+    std::cout << "Edge case tests completed" << std::endl;
 
     std::cout << "----------------------------------------" << std::endl;
     std::cout << "\nAll heap tests completed!" << std::endl;

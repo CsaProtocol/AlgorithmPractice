@@ -25,9 +25,21 @@ protected:
   using HeapVec<Data>::IsHeap;
   using HeapVec<Data>::Heapify;
   using HeapVec<Data>::Sort;
+  using HeapVec<Data>::MapFun;
+  using HeapVec<Data>::Map;
+  using HeapVec<Data>::PreOrderMap;
+  using HeapVec<Data>::PostOrderMap;
 
   Data& operator[](unsigned long index) override {
     return HeapVec<Data>::operator[](index);
+  }
+
+  Data& Front() override {
+    return HeapVec<Data>::operator[](0);
+  }
+
+  Data& Back() override {
+    return HeapVec<Data>::operator[](size - 1);
   }
 
 public:
@@ -49,8 +61,14 @@ public:
   using HeapVec<Data>::operator!=;
   using HeapVec<Data>::Clear;
 
-  const Data& operator[](unsigned long index) const override {
+  inline const Data& operator[](unsigned long index) const override {
     return HeapVec<Data>::operator[](index);
+  }
+  inline const Data& Front() const override {
+    return HeapVec<Data>::operator[](0);
+  }
+  inline const Data& Back() const override {
+    return HeapVec<Data>::operator[](size - 1);
   }
 
   const Data& Tip() const override;
@@ -66,8 +84,9 @@ public:
 protected:
 
   template<typename InsertableData>
-    requires std::totally_ordered<InsertableData>
-  void InsertImpl(InsertableData&&) noexcept;
+  void InsertImpl(InsertableData&&);
+
+  void RemoveTipAux() noexcept;
 
 };
 

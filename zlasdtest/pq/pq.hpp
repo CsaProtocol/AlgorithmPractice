@@ -68,17 +68,18 @@ void Insert(uint & testnum, uint & testerr, lasd::PQ<Data> & pq, const Data & va
 }
 
 template <typename Data>
-void Change(uint & testnum, uint & testerr, lasd::PQ<Data> & pq, ulong idx, const Data & val) {
+void Change(uint & testnum, uint & testerr, lasd::PQ<Data> & pq, bool chk, ulong idx, const Data & val) {
   testnum++;
   bool tst = true;
   try {
     std::cout << " " << testnum << " Change the value \"" << pq[idx] << "\" at index << \"" << idx << "\" to the value \"" << val << "\" in the priority queue: ";
     pq.Change(idx, val);
-    std::cout << "Correct!" << std::endl;
+    std::cout << (chk ? "Correct" : "Error") << "!" << std::endl;
+    tst = chk;
   }
   catch (std::exception & exc) {
-    std::cout << "\"" << exc.what() << "\": " << "Error!" << std::endl;
-    tst = false;
+    std::cout << exc.what() << "\": " << (!chk ? "Correct" : "Error") << "!" << std::endl;
+    tst = !chk;
   }
   testerr += (1 - (uint) tst);
 }
