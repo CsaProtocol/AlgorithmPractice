@@ -70,9 +70,10 @@ public:
   bool Exists(const Data&) const noexcept override;
 
   void Clear() override;
-  void Resize(unsigned long) override;
 
 protected:
+
+  void Resize(unsigned long) override;
 
   void InsertAt(unsigned long, const Data&) noexcept;
   void InsertAt(unsigned long, Data&&) noexcept;

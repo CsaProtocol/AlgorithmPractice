@@ -107,13 +107,11 @@ void zMyTestSetVecInt(unsigned int& testnum, unsigned int& testerr) {
     InsertC(testnum, testerr, setResize, true, 20);
     InsertC(testnum, testerr, setResize, true, 30);
 
-    setResize.Resize(10);
     Size(testnum, testerr, setResize, true, 3);
     Exists(testnum, testerr, setResize, true, 10);
     Exists(testnum, testerr, setResize, true, 20);
     Exists(testnum, testerr, setResize, true, 30);
 
-    setResize.Resize(5);
     Size(testnum, testerr, setResize, true, 3);
     Exists(testnum, testerr, setResize, true, 10);
     Exists(testnum, testerr, setResize, true, 20);
@@ -223,13 +221,11 @@ void zMyTestSetVecDouble(unsigned int& testnum, unsigned int& testerr) {
     InsertC(testnum, testerr, setResize, true, 20.2);
     InsertC(testnum, testerr, setResize, true, 30.3);
 
-    setResize.Resize(10);
     Size(testnum, testerr, setResize, true, 3);
     Exists(testnum, testerr, setResize, true, 10.1);
     Exists(testnum, testerr, setResize, true, 20.2);
     Exists(testnum, testerr, setResize, true, 30.3);
 
-    setResize.Resize(5);
     Size(testnum, testerr, setResize, true, 3);
     Exists(testnum, testerr, setResize, true, 10.1);
     Exists(testnum, testerr, setResize, true, 20.2);
@@ -332,13 +328,11 @@ void zMyTestSetVecString(unsigned int& testnum, unsigned int& testerr) {
     InsertC(testnum, testerr, setResize, true, std::string("Two"));
     InsertC(testnum, testerr, setResize, true, std::string("Three"));
 
-    setResize.Resize(10);
     Size(testnum, testerr, setResize, true, 3);
     Exists(testnum, testerr, setResize, true, std::string("One"));
     Exists(testnum, testerr, setResize, true, std::string("Two"));
     Exists(testnum, testerr, setResize, true, std::string("Three"));
 
-    setResize.Resize(5);
     Size(testnum, testerr, setResize, true, 3);
     Exists(testnum, testerr, setResize, true, std::string("One"));
     Exists(testnum, testerr, setResize, true, std::string("Two"));
