@@ -261,6 +261,7 @@ void zMyTestPQHeapInt(unsigned int& testnum, unsigned int& testerr) {
     EqualLinear(testnum, testerr, diffOrderHeap1, diffOrderHeap2, true);
     diffOrderHeap1.Clear();
     Size(testnum, testerr, diffOrderHeap1, true, 0);
+    GetAt(testnum, testerr, diffOrderHeap1, false, 0, 1);
 }
 
 void zMyTestPQHeapDouble(unsigned int& testnum, unsigned int& testerr) {
