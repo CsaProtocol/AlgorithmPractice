@@ -6,6 +6,7 @@
 #include "../../zlasdtest/container/container.hpp"
 #include "../../zlasdtest/container/linear.hpp"
 #include "../../zlasdtest/container/traversable.hpp"
+#include "../../zlasdtest/container/container.hpp"
 
 namespace zmytest {
 
@@ -258,6 +259,8 @@ void zMyTestPQHeapInt(unsigned int& testnum, unsigned int& testerr) {
     RemoveTip(testnum, testerr, diffOrderHeap1, true);
     RemoveTip(testnum, testerr, diffOrderHeap2, true);
     EqualLinear(testnum, testerr, diffOrderHeap1, diffOrderHeap2, true);
+    diffOrderHeap1.Clear();
+    Size(testnum, testerr, diffOrderHeap1, true, 0);
 }
 
 void zMyTestPQHeapDouble(unsigned int& testnum, unsigned int& testerr) {
