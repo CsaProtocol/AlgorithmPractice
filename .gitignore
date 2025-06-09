@@ -1,0 +1,44 @@
+# IntelliJ IDEA
+.idea/
+
+# CLion
+cmake-build-*/
+
+# VS Code
+../../../.vscode/
+
+# C++ Build Artifacts
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+main
+
+# Precompiled Headers
+*.gch
+
+# Coverage Data
+*.gcno
+*.gcda
+coverage/
+lcov-report/
+gcovr-report/
+
+# Valgrind Output
+combined_output.txt
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Other
+output.txt
+
