@@ -84,9 +84,63 @@ public:
   using typename MappableContainer<Data>::MapFun;
   virtual void PostOrderMap(MapFun) = 0;
 
-  void Map(MapFun fun) override {
+  inline void Map(MapFun fun) override {
     PostOrderMap(fun);
   }
+
+};
+
+/* ************************************************************************** */
+
+template <typename Data>
+class InOrderMappableContainer : virtual public MappableContainer<Data>,
+                                 virtual public InOrderTraversableContainer<Data> {
+
+public:
+
+  InOrderMappableContainer() = default;
+  ~InOrderMappableContainer() override = default;
+
+  InOrderMappableContainer& operator=(const InOrderMappableContainer&) = delete;
+  InOrderMappableContainer& operator=(InOrderMappableContainer&&) noexcept = delete;
+
+  bool operator==(const InOrderMappableContainer&) const noexcept = delete;
+  bool operator!=(const InOrderMappableContainer&) const noexcept = delete;
+
+  using typename MappableContainer<Data>::MapFun;
+
+  virtual void InOrderMap(MapFun) = 0;
+
+  inline void Map(MapFun fun) override {
+    InOrderMap(fun);
+  }
+
+};
+
+/* ************************************************************************** */
+
+template <typename Data>
+class BreadthMappableContainer : virtual public MappableContainer<Data>,
+                                 virtual public BreadthTraversableContainer<Data> {
+
+public:
+
+  BreadthMappableContainer() = default;
+  ~BreadthMappableContainer() override = default;
+
+  BreadthMappableContainer & operator=(const BreadthMappableContainer &) = delete;
+  BreadthMappableContainer & operator=(BreadthMappableContainer &&) noexcept = delete;
+
+  bool operator==(const BreadthMappableContainer &) const noexcept = delete;
+  bool operator!=(const BreadthMappableContainer &) const noexcept = delete;
+
+  using typename MappableContainer<Data>::MapFun;
+  virtual void BreadthMap(MapFun) = 0;
+
+  inline void Map(MapFun fun) override {
+    BreadthMap(fun);
+  }
+
 
 };
 

@@ -46,6 +46,27 @@ Accumulator PostOrderTraversableContainer<Data>::PostOrderFold(FoldFun<Accumulat
     return accumulator;
 }
 
+template<typename Data>
+template<typename Accumulator>
+Accumulator InOrderTraversableContainer<Data>::InOrderFold(FoldFun<Accumulator> foldfun, Accumulator folded) const {
+    Accumulator accumulator = folded;
+    auto traversefunctor = [&accumulator, &foldfun] (const Data& data) {
+        accumulator = foldfun(data, accumulator);
+    };
+    InOrderTraverse(traversefunctor);
+    return accumulator;
+}
+
+template<typename Data>
+template<typename Accumulator>
+Accumulator BreadthTraversableContainer<Data>::BreadthFold(FoldFun<Accumulator> foldfun, Accumulator folded) const {
+    Accumulator accumulator = folded;
+    auto traversefunctor = [&accumulator, &foldfun] (const Data& data) {
+        accumulator = foldfun(data, accumulator);
+    };
+    BreadthTraverse(traversefunctor);
+    return accumulator;
+}
 
 
 /* ************************************************************************** */

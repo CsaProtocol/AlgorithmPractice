@@ -5,7 +5,11 @@
 #include "./exercise2a/test.hpp"
 #include "./exercise2b/test.hpp"
 
+#include "./exercise3a/test.hpp"
+
 /* ************************************************************************** */
+
+#include "exercise3a/test.hpp"
 
 #include <iostream>
 
@@ -59,6 +63,21 @@ void lasdtest() {
 
   cout << endl << "Exercise 2 (Simple Test) (Errors/Tests: " << stesterr << "/" << stestnum << ")";
   cout << endl << "Exercise 2 (Full Test) (Errors/Tests: " << ftesterr << "/" << ftestnum << ")" << endl;
+
+  cout << endl << "Goodbye!" << endl;
+
+  stestnum = 0; stesterr = 0; ftestnum = 0; ftesterr = 0;
+
+  loctestnum = 0; loctesterr = 0;
+  testSimpleExercise3A(loctestnum, loctesterr);
+  stestnum += loctestnum; stesterr += loctesterr;
+
+  loctestnum = 0; loctesterr = 0;
+  testFullExercise3A(loctestnum, loctesterr);
+  stestnum += loctestnum; stesterr += loctesterr;
+
+  cout << endl << "Exercise 3A (Simple Test) (Errors/Tests: " << stesterr << "/" << stestnum << ")";
+  cout << endl << "Exercise 3A (Full Test) (Errors/Tests: " << ftesterr << "/" << ftestnum << ")" << endl;
 
   cout << endl << "Goodbye!" << endl;
 }

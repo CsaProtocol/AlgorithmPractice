@@ -19,6 +19,14 @@ A C++ project implementing a collection of fundamental data structures and algor
         *   `SortableVector<Data>` (requires `std::totally_ordered<Data>`)
     *   **List**: Doubly linked list.
         *   `List<Data>`
+    *   **Stack**: LIFO (Last-In-First-Out) data structure.
+        *   `Stack<Data>` (interface)
+        *   `StackLst<Data>`: Stack implemented using a `List`.
+        *   `StackVec<Data>`: Stack implemented using a `Vector`.
+    *   **Queue**: FIFO (First-In-First-Out) data structure.
+        *   `Queue<Data>` (interface)
+        *   `QueueLst<Data>`: Queue implemented using a `List`.
+        *   `QueueVec<Data>`: Queue implemented using a `Vector`.
     *   **Set**: Collection of unique, sorted elements.
         *   `Set<Data>` (interface)
         *   `SetVec<Data>`: Set implemented using a `SortableVector`.
@@ -191,4 +199,3 @@ A script `valgrind.sh` is provided to run the `main` executable under Valgrind f
 ## License
 
 This project is licensed under the Mozilla Public License Version 2.0. See the [LICENSE](LICENSE) file for details.
-

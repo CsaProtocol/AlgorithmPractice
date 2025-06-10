@@ -23,6 +23,7 @@ protected:
 
   Vector<Data>* vec = nullptr;
   unsigned long head = 0;
+  static constexpr unsigned long defaultSetVecSize = 16;
 
 public:
 
@@ -74,7 +75,6 @@ public:
 protected:
 
   void Resize(unsigned long) override;
-
   void InsertAt(unsigned long, const Data&) noexcept;
   void InsertAt(unsigned long, Data&&) noexcept;
   void RemoveAt(unsigned long) noexcept;

@@ -3,18 +3,16 @@
 
 namespace lasd {
 
-unsigned long constexpr defaultSetVecSize = 5;
-
 /* ************************************************************************** */
 
-template <typename Data>
+template<typename Data>
 SetVec<Data>::SetVec() {
     vec = new Vector<Data>(defaultSetVecSize);
     head = 0;
     size = 0;
 }
 
-template <typename Data>
+template<typename Data>
 SetVec<Data>::SetVec(const TraversableContainer<Data>& toCopy) : SetVec() {
     auto functor = [this](const Data& data) {
         Insert(data);
@@ -32,7 +30,11 @@ SetVec<Data>::SetVec(MappableContainer<Data>&& toMove) noexcept : SetVec() {
 
 template<typename Data>
 SetVec<Data>::SetVec(const SetVec& toCopy) {
-    vec = new Vector<Data>(*(toCopy.vec));
+    if(toCopy.vec == nullptr) {
+        vec = new Vector<Data>(defaultSetVecSize);
+    } else {
+        vec = new Vector<Data>(*(toCopy.vec));
+    }
     head = toCopy.head;
     size = toCopy.size;
 }
@@ -318,7 +320,7 @@ const Data& SetVec<Data>::operator[](const unsigned long logicalIndex) const {
 template <typename Data>
 void SetVec<Data>::InsertAt(unsigned long physicalindexvalue, const Data& value) noexcept {
     if(size == vec->Size()) {
-        vec->Resize(size * 2);
+        this->Resize(size * 2);
     }
     for(unsigned long i = size; i > physicalindexvalue; i--) {
         vec->operator[](physicalIndex(i)) = vec->operator[](physicalIndex(i - 1));
@@ -330,7 +332,7 @@ void SetVec<Data>::InsertAt(unsigned long physicalindexvalue, const Data& value)
 template <typename Data>
 void SetVec<Data>::InsertAt(unsigned long physicalindexvalue, Data&& value) noexcept {
     if(size == vec->Size()) {
-        vec->Resize(size * 2);
+        this->Resize(size * 2);
     }
     for(unsigned long i = size; i > physicalindexvalue; i--) {
         vec->operator[](physicalIndex(i)) = vec->operator[](physicalIndex(i - 1));
@@ -346,7 +348,7 @@ void SetVec<Data>::RemoveAt(const unsigned long physicalindexvalue) noexcept {
     }
     size--;
     if(size < vec->Size() / 4 && vec->Size() > defaultSetVecSize) {
-        vec->Resize(std::max(defaultSetVecSize, vec->Size() / 2));
+        this->Resize(std::max(defaultSetVecSize, vec->Size() / 2));
     }
 }
 

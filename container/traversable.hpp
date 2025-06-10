@@ -108,6 +108,67 @@ public:
 
 /* ************************************************************************** */
 
+template <typename Data>
+class InOrderTraversableContainer : virtual public TraversableContainer<Data> {
+
+public:
+
+  InOrderTraversableContainer() = default;
+  ~InOrderTraversableContainer() override = default;
+
+  InOrderTraversableContainer& operator=(const InOrderTraversableContainer&) = delete;
+  InOrderTraversableContainer& operator=(InOrderTraversableContainer&&) noexcept = delete;
+
+  bool operator==(const InOrderTraversableContainer&) const noexcept = delete;
+  bool operator!=(const InOrderTraversableContainer&) const noexcept = delete;
+
+  using typename TraversableContainer<Data>::TraverseFun;
+  virtual void InOrderTraverse(TraverseFun) const = 0;
+
+  template <typename Accumulator>
+  using FoldFun = typename TraversableContainer<Data>::template FoldFun<Accumulator>;
+
+  template <typename Accumulator>
+  Accumulator InOrderFold(FoldFun<Accumulator>, Accumulator) const;
+
+  inline void Traverse(TraverseFun fun) const override {
+    InOrderTraverse(fun);
+  }
+
+};
+
+/* ************************************************************************** */
+
+template <typename Data>
+class BreadthTraversableContainer : virtual public TraversableContainer<Data> {
+public:
+
+  BreadthTraversableContainer() = default;
+  ~BreadthTraversableContainer() override = default;
+
+  BreadthTraversableContainer& operator=(const BreadthTraversableContainer&) = delete;
+  BreadthTraversableContainer& operator=(BreadthTraversableContainer&&) noexcept = delete;
+
+  bool operator==(const BreadthTraversableContainer&) const noexcept = delete;
+  bool operator!=(const BreadthTraversableContainer&) const noexcept = delete;
+
+  using typename TraversableContainer<Data>::TraverseFun;
+  virtual void BreadthTraverse(TraverseFun) const = 0;
+
+  template <typename Accumulator>
+  using FoldFun = typename TraversableContainer<Data>::template FoldFun<Accumulator>;
+
+  template <typename Accumulator>
+  Accumulator BreadthFold(FoldFun<Accumulator>, Accumulator) const;
+
+  inline void Traverse(TraverseFun fun) const override {
+    BreadthTraverse(fun);
+  }
+
+};
+
+/* ************************************************************************** */
+
 }
 
 #include "traversable.cpp"

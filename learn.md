@@ -121,7 +121,106 @@ Represented by the interface `lasd::Heap<Data>` and implemented by `lasd::HeapVe
         *   Complexity: O(N log N)
         *   Explanation: Builds a heap (O(N)) and then extracts N elements (N * O(log N)).
 
-## 5. Priority Queue (PQ)
+## 5. Stack (LIFO)
+
+Represented by the interface `lasd::Stack<Data>` and implemented by `lasd::StackLst<Data>` (using `List`) and `lasd::StackVec<Data>` (using `Vector`).
+
+*   **Description**: A Last-In-First-Out (LIFO) data structure where elements are inserted (pushed) and removed (popped) from the same end, called the "top" of the stack.
+*   **Key Operations & Complexity**:
+
+### 5.1. `StackLst<Data>` (Stack implemented with `List`)
+
+*   **Description**: Uses a linked list to store elements, with the head of the list serving as the top of the stack.
+*   **Key Operations & Complexity**:
+    *   **Push (`Push`)**:
+        *   Complexity: O(1)
+        *   Explanation: Inserts at the front of the list.
+    *   **Pop (`Pop`)**:
+        *   Complexity: O(1)
+        *   Explanation: Removes from the front of the list.
+    *   **Top (`Top`)**:
+        *   Complexity: O(1)
+        *   Explanation: Returns the value at the front of the list.
+    *   **TopNPop (`TopNPop`)**:
+        *   Complexity: O(1)
+        *   Explanation: Returns and removes the value at the front of the list.
+    *   **Clear (`Clear`)**:
+        *   Complexity: O(N)
+        *   Explanation: Needs to deallocate all nodes in the list.
+
+### 5.2. `StackVec<Data>` (Stack implemented with `Vector`)
+
+*   **Description**: Uses a vector to store elements, with dynamic resizing. The end of the vector serves as the top of the stack.
+*   **Key Operations & Complexity**:
+    *   **Push (`Push`)**:
+        *   Complexity: O(1) amortized (can be O(N) when the vector needs to resize)
+        *   Explanation: Adds an element at the end of the vector. If the vector is full, it is resized (doubled in size).
+    *   **Pop (`Pop`)**:
+        *   Complexity: O(1)
+        *   Explanation: Decrements the size counter without actually removing the element from memory.
+    *   **Top (`Top`)**:
+        *   Complexity: O(1)
+        *   Explanation: Returns the value at the current top position.
+    *   **TopNPop (`TopNPop`)**:
+        *   Complexity: O(1)
+        *   Explanation: Returns the value at the top position and decrements the size counter.
+    *   **Clear (`Clear`)**:
+        *   Complexity: O(1)
+        *   Explanation: Creates a new vector and resets the size counter.
+
+## 6. Queue (FIFO)
+
+Represented by the interface `lasd::Queue<Data>` and implemented by `lasd::QueueLst<Data>` (using `List`) and `lasd::QueueVec<Data>` (using `Vector`).
+
+*   **Description**: A First-In-First-Out (FIFO) data structure where elements are inserted at one end (rear/tail) and removed from the other end (front/head). The first element added to the queue will be the first one to be removed.
+*   **Key Operations & Complexity**:
+
+### 6.1. `QueueLst<Data>` (Queue implemented with `List`)
+
+*   **Description**: Uses a doubly linked list to store elements. Elements are enqueued at the tail and dequeued from the head, providing efficient operations at both ends.
+*   **Key Operations & Complexity**:
+    *   **Enqueue (`Enqueue`)**:
+        *   Complexity: O(1)
+        *   Explanation: Inserts at the back of the list.
+    *   **Dequeue (`Dequeue`)**:
+        *   Complexity: O(1)
+        *   Explanation: Removes from the front of the list.
+    *   **Get Front Element (`Head`)**:
+        *   Complexity: O(1)
+        *   Explanation: Returns the value at the front of the list.
+    *   **Get and Remove Front Element (`HeadNDequeue`)**:
+        *   Complexity: O(1)
+        *   Explanation: Returns and removes the value at the front of the list.
+    *   **Clear (`Clear`)**:
+        *   Complexity: O(N)
+        *   Explanation: Needs to deallocate all nodes in the list.
+
+### 6.2. `QueueVec<Data>` (Queue implemented with `Vector`)
+
+*   **Description**: Uses a circular buffer implemented with a vector to store elements. This approach allows efficient enqueue and dequeue operations without constantly shifting elements.
+*   **Key Operations & Complexity**:
+    *   **Enqueue (`Enqueue`)**:
+        *   Complexity: O(1) amortized (can be O(N) when the vector needs to resize)
+        *   Explanation: Adds an element at the logical end of the queue. If the vector is full, it is resized (typically doubled in size).
+    *   **Dequeue (`Dequeue`)**:
+        *   Complexity: O(1) amortized
+        *   Explanation: Increments the head index and decreases size. If the queue becomes too small compared to the vector capacity, the vector may be resized.
+    *   **Get Front Element (`Head`)**:
+        *   Complexity: O(1)
+        *   Explanation: Returns the value at the current head index.
+    *   **Get and Remove Front Element (`HeadNDequeue`)**:
+        *   Complexity: O(1) amortized
+        *   Explanation: Returns the value at the head index, then performs a dequeue operation.
+    *   **Clear (`Clear`)**:
+        *   Complexity: O(1)
+        *   Explanation: Creates a new vector and resets the head and size counters.
+    
+*   **Implementation Details**:
+    *   Uses a circular buffer approach where elements wrap around the end of the array.
+    *   Physical index calculation: `(head + logical_index) % vector_capacity` converts logical positions to actual array indices.
+    *   Dynamic resizing strategy: typically grows by doubling when full, and shrinks when usage falls below a threshold (e.g., 25% of capacity).
+
+## 7. Priority Queue (PQ)
 
 Represented by the interface `lasd::PQ<Data>` and implemented by `lasd::PQHeap<Data>` (using `HeapVec`).
 
@@ -145,4 +244,3 @@ Represented by the interface `lasd::PQ<Data>` and implemented by `lasd::PQHeap<D
 ---
 
 This document provides a general guide. The exact performance can sometimes depend on the nature of the data being processed. Refer to the source code for the most precise understanding.
-

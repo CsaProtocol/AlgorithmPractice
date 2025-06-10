@@ -91,10 +91,6 @@ This project aims to be a comprehensive practice ground for C++ and DSA. Here ar
         *   Shortest Path: Dijkstra's Algorithm, Bellman-Ford Algorithm
         *   Minimum Spanning Tree: Prim's Algorithm, Kruskal's Algorithm
         *   Topological Sort
-*   **Stack**:
-    *   Adapter class using `lasd::Vector` or `lasd::List`.
-*   **Queue**:
-    *   Adapter class using `lasd::Vector` or `lasd::List`.
 
 ### Enhancements to Existing Structures
 
@@ -137,4 +133,3 @@ For `SortableLinearContainer` or specialized sortable structures:
 *   **Tutorials**: Add simple tutorial files or examples in the `learn.md` or separate files demonstrating how to use the various library components.
 
 We are excited to see your contributions and grow this library together!
-
