@@ -1,10 +1,10 @@
 
 cc = g++
-cflags = -g -Wall -Wno-sequence-point -pedantic -O0 -std=c++20 -fsanitize=address
+cflags = -g -Wall -ftest-coverage -fprofile-arcs -Wno-sequence-point -pedantic -O0 -std=c++20 -fsanitize=address -Waddress -Wextra -Waligned-new -Warray-bounds=1 -Warray-compare -Warray-parameter=2 -Wbool-compare -Wbool-operation -Wc++11-compat -Wc++14-compat -Wc++17-compat -Wc++20-compat -Wcatch-value -Wchar-subscripts -Wclass-memaccess -Wcomment -Wdangling-else -Wdangling-pointer=2 -Wdelete-non-virtual-dtor -Wenum-compare -Wformat=1 -Wformat-contains-nul -Wformat-diag -Wformat-extra-args -Wformat-overflow=1 -Wformat-truncation=1 -Wformat-zero-length -Wframe-address -Winfinite-recursion -Winit-self -Wint-in-bool-context -Wlogical-not-parentheses -Wmaybe-uninitialized -Wmemset-elt-size -Wmemset-transposed-args -Wmisleading-indentation -Wmismatched-dealloc -Wmismatched-new-delete -Wmissing-attributes -Wmultistatement-macros -Wnarrowing -Wnonnull -Wnonnull-compare -Wopenmp-simd -Woverloaded-virtual=1 -Wpacked-not-aligned -Wparentheses -Wpessimizing-move -Wrange-loop-construct -Wreorder -Wrestrict -Wreturn-type -Wself-move -Wsequence-point -Wsign-compare -Wsizeof-array-div -Wsizeof-pointer-div -Wsizeof-pointer-memaccess -Wstrict-aliasing -Wstrict-overflow=1 -Wswitch -Wtautological-compare -Wtrigraphs -Wuninitialized -Wunknown-pragmas -Wunused -Wunused-but-set-variable -Wunused-function -Wunused-label -Wunused-local-typedefs -Wunused-value -Wunused-variable -Wuse-after-free=2 -Wvla-parameter -Wvolatile-register-var -Wzero-length-bounds
 cflagsextra = -g -ftest-coverage -fprofile-arcs -Wextra -Woverloaded-virtual -Wuninitialized -Wmaybe-uninitialized -Werror -Wshadow -Wuninitialized -Wconversion -Wsign-compare -D_GLIBCXX_DEBUG -fsanitize=undefined -fno-omit-frame-pointer -Wstrict-aliasing=3 -Wcast-qual -Wcast-align
 cflagsexplicitwall = -Waddress -Waligned-new -Warray-bounds=1 -Warray-compare -Warray-parameter=2 -Wbool-compare -Wbool-operation -Wc++11-compat -Wc++14-compat -Wc++17-compat -Wc++20-compat -Wcatch-value -Wchar-subscripts -Wclass-memaccess -Wcomment -Wdangling-else -Wdangling-pointer=2 -Wdelete-non-virtual-dtor -Wenum-compare -Wformat=1 -Wformat-contains-nul -Wformat-diag -Wformat-extra-args -Wformat-overflow=1 -Wformat-truncation=1 -Wformat-zero-length -Wframe-address -Winfinite-recursion -Winit-self -Wint-in-bool-context -Wlogical-not-parentheses -Wmaybe-uninitialized -Wmemset-elt-size -Wmemset-transposed-args -Wmisleading-indentation -Wmismatched-dealloc -Wmismatched-new-delete -Wmissing-attributes -Wmultistatement-macros -Wnarrowing -Wnonnull -Wnonnull-compare -Wopenmp-simd -Woverloaded-virtual=1 -Wpacked-not-aligned -Wparentheses -Wpessimizing-move -Wrange-loop-construct -Wreorder -Wrestrict -Wreturn-type -Wself-move -Wsequence-point -Wsign-compare -Wsizeof-array-div -Wsizeof-pointer-div -Wsizeof-pointer-memaccess -Wstrict-aliasing -Wstrict-overflow=1 -Wswitch -Wtautological-compare -Wtrigraphs -Wuninitialized -Wunknown-pragmas -Wunused -Wunused-but-set-variable -Wunused-function -Wunused-label -Wunused-local-typedefs -Wunused-value -Wunused-variable -Wuse-after-free=2 -Wvla-parameter -Wvolatile-register-var -Wzero-length-bounds
 
-objects = main.o test.o mytest.o container.o exc1as.o exc1af.o exc1bs.o exc1bf.o exc2as.o exc2af.o exc2bs.o exc2bf.o exc3as.o exc3af.o zmytestvector.o zmytestsortablevector.o zmytestlist.o zmytestlinear.o zmytestsetlst.o zmytestsetvec.o zmytestset.o zmytestheapvec.o zmytestpqheap.o
+objects = main.o test.o mytest.o container.o exc1as.o exc1af.o exc1bs.o exc1bf.o exc2as.o exc2af.o exc2bs.o exc2bf.o exc3as.o exc3af.o exc3bs.o exc3bf.o zmytestvector.o zmytestsortablevector.o zmytestlist.o zmytestlinear.o zmytestsetlst.o zmytestsetvec.o zmytestset.o zmytestheapvec.o zmytestpqheap.o
 
 libcon = container/container.hpp container/testable.hpp container/traversable.hpp container/traversable.cpp container/mappable.hpp container/mappable.cpp container/dictionary.hpp container/dictionary.cpp container/linear.hpp container/linear.cpp
 libexc = $(libcon) zlasdtest/container/container.hpp zlasdtest/container/testable.hpp zlasdtest/container/traversable.hpp zlasdtest/container/mappable.hpp zlasdtest/container/dictionary.hpp zlasdtest/container/linear.hpp
@@ -16,6 +16,7 @@ libexc2a = $(libexc) heap/heap.hpp heap/vec/heapvec.hpp heap/vec/heapvec.cpp zla
 libexc2b = $(libexc2a) pq/pq.hpp pq/heap/pqheap.hpp pq/heap/pqheap.cpp zlasdtest/pq/pq.hpp
 
 libexc3a = $(libexc1a) stack/stack.hpp stack/lst/stacklst.cpp stack/lst/stacklst.hpp stack/vec/stackvec.cpp stack/vec/stackvec.hpp queue/queue.hpp queue/lst/queuelst.cpp queue/lst/queuelst.hpp queue/vec/queuevec.cpp queue/vec/queuevec.hpp
+libexc3b = $(libexc) iterator/iterator.hpp binarytree/binarytree.cpp binarytree/binarytree.hpp binarytree/lnk/binarytreelnk.cpp binarytree/lnk/binarytreelnk.hpp binarytree/vec/binarytreevec.cpp binarytree/vec/binarytreevec.hpp
 
 all: main
 
@@ -73,6 +74,11 @@ exc3as.o: $(libexc3a) zlasdtest/exercise3a/simpletest.cpp
 	$(cc) $(cflags) -c zlasdtest/exercise3a/simpletest.cpp -o exc3as.o
 exc3af.o: $(libexc3a) zlasdtest/exercise3a/fulltest.cpp
 	$(cc) $(cflags) -c zlasdtest/exercise3a/fulltest.cpp -o exc3af.o
+
+exc3bs.o: $(libexc3b) zlasdtest/exercise3b/simpletest.cpp
+	$(cc) $(cflags) -c zlasdtest/exercise3b/simpletest.cpp -o exc3bs.o
+exc3bf.o: $(libexc3b) zlasdtest/exercise3b/fulltest.cpp
+	$(cc) $(cflags) -c zlasdtest/exercise3b/fulltest.cpp -o exc3bf.o
 
 
 zmytestvector.o: zmytest/linear/vector zmytest/linear/vector

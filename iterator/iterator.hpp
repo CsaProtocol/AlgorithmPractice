@@ -22,9 +22,8 @@ public:
   bool operator==(const Iterator &) const noexcept = delete;
   bool operator!=(const Iterator &) const noexcept = delete;
 
-  virtual const Data & operator*() const = 0;
-
-  inline virtual const Data * operator->() const {
+  virtual const Data& operator*() const = 0;
+  inline virtual const Data* operator->() const {
     return (&(operator*()));
   }
 
@@ -42,14 +41,14 @@ public:
   MutableIterator() = default;
   ~MutableIterator() override = default;
 
-  MutableIterator & operator=(const MutableIterator &) = delete;
-  MutableIterator & operator=(MutableIterator &&) noexcept = delete;
+  MutableIterator& operator=(const MutableIterator&) = delete;
+  MutableIterator& operator=(MutableIterator&&) noexcept = delete;
 
-  bool operator==(const MutableIterator &) const noexcept = delete;
-  bool operator!=(const MutableIterator &) const noexcept = delete;
+  bool operator==(const MutableIterator&) const noexcept = delete;
+  bool operator!=(const MutableIterator&) const noexcept = delete;
 
   using Iterator<Data>::operator*;
-  virtual Data & operator*() = 0;
+  virtual Data& operator*() = 0;
 
   using Iterator<Data>::operator->;
   inline virtual Data * operator->() {
@@ -68,13 +67,13 @@ public:
   ForwardIterator() = default;
   ~ForwardIterator() override = default;
 
-  ForwardIterator & operator=(const ForwardIterator &) = delete;
-  ForwardIterator & operator=(ForwardIterator &&) noexcept = delete;
+  ForwardIterator& operator=(const ForwardIterator &) = delete;
+  ForwardIterator& operator=(ForwardIterator &&) noexcept = delete;
 
   bool operator==(const ForwardIterator &) const noexcept = delete;
   bool operator!=(const ForwardIterator &) const noexcept = delete;
 
-  virtual ForwardIterator & operator++() = 0;
+  virtual ForwardIterator& operator++() = 0;
 
 };
 

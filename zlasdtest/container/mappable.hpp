@@ -115,4 +115,42 @@ void MapPostOrder(uint & testnum, uint & testerr, lasd::PostOrderMappableContain
 
 /* ************************************************************************** */
 
+// InOrderMappableContainer member functions!
+
+template <typename Data>
+void MapInOrder(uint & testnum, uint & testerr, lasd::InOrderMappableContainer<Data> & con, bool chk, typename lasd::MappableContainer<Data>::MapFun fun) {
+  bool tst = true;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing map in order - ";
+    con.InOrderMap(fun);
+    std::cout << ": " << ((tst = chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
+
+/* ************************************************************************** */
+
+// BreadthMappableContainer member functions!
+
+template <typename Data>
+void MapBreadth(uint & testnum, uint & testerr, lasd::BreadthMappableContainer<Data> & con, bool chk, typename lasd::MappableContainer<Data>::MapFun fun) {
+  bool tst = true;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing map in breadth - ";
+    con.BreadthMap(fun);
+    std::cout << ": " << ((tst = chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
+
+/* ************************************************************************** */
+
 #endif

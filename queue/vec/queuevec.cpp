@@ -25,6 +25,12 @@ QueueVec<Data>::QueueVec(MappableContainer<Data>&& toMove) noexcept : QueueVec()
 }
 
 template<typename Data>
+QueueVec<Data>::~QueueVec() {
+	delete vec;
+	vec = nullptr;
+}
+
+template<typename Data>
 QueueVec<Data>::QueueVec(const QueueVec& toCopy) {
 	delete vec;
 	if(toCopy.vec == nullptr) {

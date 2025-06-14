@@ -1,4 +1,3 @@
-
 #ifndef TRAVERSABLETEST_HPP
 #define TRAVERSABLETEST_HPP
 
@@ -172,6 +171,111 @@ void FoldPostOrder(uint & testnum, uint & testerr, const lasd::PostOrderTraversa
   testerr += (1 - (uint) tst);
 }
 
+/* ************************************************************************** */
+
+// InOrderTraversableContainer member functions!
+
+template <typename Data>
+void TraverseInOrder(uint & testnum, uint & testerr, const lasd::InOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::TraverseFun fun) {
+  bool tst = true;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing traverse in order - ";
+    con.InOrderTraverse(fun);
+    std::cout << ": " << ((tst = chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
+
+template <typename Data, typename Value>
+void FoldInOrder(uint & testnum, uint & testerr, const lasd::InOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
+  bool tst;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing fold in order - ";
+    Value val = con.InOrderFold(fun, inival);
+    std::cout << "obtained value is \"" << val << "\": ";
+    std::cout << ((tst = ((val == finval) == chk)) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
+
+template <typename Data, typename Value>
+requires std::is_floating_point_v<Data>
+void FoldInOrder(uint & testnum, uint & testerr, const lasd::InOrderTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
+  bool tst;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing fold in order - ";
+    Value val = con.InOrderFold(fun, inival);
+    std::cout << "obtained value is \"" << val << "\": ";
+    const bool is_equal = AreEqual(val, finval);
+    std::cout << ((tst = ((is_equal) == chk)) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
+
+/* ************************************************************************** */
+
+// BreadthTraversableContainer member functions!
+
+template <typename Data>
+void TraverseBreadth(uint & testnum, uint & testerr, const lasd::BreadthTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::TraverseFun fun) {
+  bool tst = true;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing traverse in breadth - ";
+    con.BreadthTraverse(fun);
+    std::cout << ": " << ((tst = chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
+
+template <typename Data, typename Value>
+void FoldBreadth(uint & testnum, uint & testerr, const lasd::BreadthTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
+  bool tst;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing fold in breadth - ";
+    Value val = con.BreadthFold(fun, inival);
+    std::cout << "obtained value is \"" << val << "\": ";
+    std::cout << ((tst = ((val == finval) == chk)) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
+
+template <typename Data, typename Value>
+requires std::is_floating_point_v<Data>
+void FoldBreadth(uint & testnum, uint & testerr, const lasd::BreadthTraversableContainer<Data> & con, bool chk, typename lasd::TraversableContainer<Data>::FoldFun<Value> fun, const Value & inival, const Value & finval) {
+  bool tst;
+  testnum++;
+  try {
+    std::cout << " " << testnum << " (" << testerr << ") Executing fold in breadth - ";
+    Value val = con.BreadthFold(fun, inival);
+    std::cout << "obtained value is \"" << val << "\": ";
+    const bool is_equal = AreEqual(val, finval);
+    std::cout << ((tst = ((is_equal) == chk)) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  catch (std::exception & exc) {
+    std::cout << "\"" << exc.what() << "\": " << ((tst = !chk) ? "Correct" : "Error") << "!" << std::endl;
+  }
+  testerr += (1 - (uint) tst);
+}
 
 /* ************************************************************************** */
 

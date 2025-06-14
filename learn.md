@@ -99,7 +99,84 @@ Represented by the interface `lasd::Set<Data>` and implemented by `lasd::SetVec<
         *   Complexity: O(N)
         *   Explanation: Traverse to find the element or its position.
 
-## 4. Heap (Max-Heap)
+## 4. Binary Tree
+
+Represented by the interfaces `lasd::BinaryTree<Data>` and `lasd::MutableBinaryTree<Data>`, and implemented by `lasd::BinaryTreeVec<Data>` (using `Vector`) and `lasd::BinaryTreeLnk<Data>` (using nodes with pointers).
+
+*   **Description**: A hierarchical data structure where each node has at most two children, referred to as the left child and right child. The repository provides both interfaces (BinaryTree and MutableBinaryTree) and two implementations, as well as iterator support for multiple traversal methods.
+
+*   **Traversal Methods**:
+    *   **Pre-Order**: Visit the current node before its children (Root, Left, Right).
+    *   **Post-Order**: Visit the current node after its children (Left, Right, Root).
+    *   **In-Order**: Visit the left subtree, then the current node, then the right subtree (Left, Root, Right).
+    *   **Breadth-First (Level Order)**: Visit all nodes at the same depth before moving to the next level.
+
+### 4.1. `BinaryTreeVec<Data>` (Binary Tree implemented with `Vector`)
+
+*   **Description**: Elements are stored in a `Vector` using the implicit array representation of a binary tree, where for a node at index `i`:
+    * Left child is at index `2i + 1`
+    * Right child is at index `2i + 2`
+    * Parent is at index `(i-1)/2` (for non-root nodes)
+    
+*   **Key Operations & Complexity**:
+    *   **Element Access (node's element)**:
+        *   Complexity: O(1)
+        *   Explanation: Direct array access.
+    *   **Node Navigation (parent, left child, right child)**:
+        *   Complexity: O(1)
+        *   Explanation: Simple index calculation.
+    *   **Tree Construction (from a traversable container)**:
+        *   Complexity: O(N)
+        *   Explanation: Copying N elements to the vector.
+    *   **Traversals (Pre-Order, In-Order, Post-Order, Breadth)**:
+        *   Complexity: O(N)
+        *   Explanation: Each node is visited exactly once.
+    *   **Memory Usage**:
+        *   Storage is contiguous, which is cache-friendly.
+        *   May waste space if the tree is sparse.
+
+### 4.2. `BinaryTreeLnk<Data>` (Binary Tree implemented with linked nodes)
+
+*   **Description**: Elements are stored in nodes with explicit pointers to their left and right children.
+    
+*   **Key Operations & Complexity**:
+    *   **Element Access (node's element)**:
+        *   Complexity: O(1)
+        *   Explanation: Direct access via node reference.
+    *   **Node Navigation (left child, right child)**:
+        *   Complexity: O(1)
+        *   Explanation: Following pointers.
+    *   **Tree Construction (from a traversable container)**:
+        *   Complexity: O(N)
+        *   Explanation: Creating N nodes and setting up the structure.
+    *   **Traversals (Pre-Order, In-Order, Post-Order, Breadth)**:
+        *   Complexity: O(N)
+        *   Explanation: Each node is visited exactly once.
+    *   **Memory Usage**:
+        *   Nodes are allocated dynamically, allowing for sparse trees without wasting space.
+        *   Extra memory for pointers is required.
+        *   Non-contiguous memory may be less cache-friendly.
+
+### 4.3. Binary Tree Iterators
+
+The repository provides several iterator types for traversing binary trees:
+
+*   **`BTPreOrderIterator<Data>`**: Traverses in pre-order (Root, Left, Right).
+*   **`BTPostOrderIterator<Data>`**: Traverses in post-order (Left, Right, Root).
+*   **`BTInOrderIterator<Data>`**: Traverses in in-order (Left, Root, Right).
+*   **`BTBreadthIterator<Data>`**: Traverses level-by-level (breadth-first).
+
+Each iterator type also has a mutable counterpart (e.g., `BTPreOrderMutableIterator<Data>`) that allows modifying the elements.
+
+*   **Iterator Operations & Complexity**:
+    *   **Increment (`++` operator)**:
+        *   Complexity: Amortized O(1) for most iterators, with possible O(log N) for some operations depending on the tree structure.
+    *   **Dereferencing (`*` operator)**:
+        *   Complexity: O(1)
+    *   **Reset**:
+        *   Complexity: O(1) to reset state to the beginning.
+
+## 5. Heap (Max-Heap)
 
 Represented by the interface `lasd::Heap<Data>` and implemented by `lasd::HeapVec<Data>` (using `SortableVector`).
 
@@ -121,14 +198,14 @@ Represented by the interface `lasd::Heap<Data>` and implemented by `lasd::HeapVe
         *   Complexity: O(N log N)
         *   Explanation: Builds a heap (O(N)) and then extracts N elements (N * O(log N)).
 
-## 5. Stack (LIFO)
+## 6. Stack (LIFO)
 
 Represented by the interface `lasd::Stack<Data>` and implemented by `lasd::StackLst<Data>` (using `List`) and `lasd::StackVec<Data>` (using `Vector`).
 
 *   **Description**: A Last-In-First-Out (LIFO) data structure where elements are inserted (pushed) and removed (popped) from the same end, called the "top" of the stack.
 *   **Key Operations & Complexity**:
 
-### 5.1. `StackLst<Data>` (Stack implemented with `List`)
+### 6.1. `StackLst<Data>` (Stack implemented with `List`)
 
 *   **Description**: Uses a linked list to store elements, with the head of the list serving as the top of the stack.
 *   **Key Operations & Complexity**:
@@ -148,7 +225,7 @@ Represented by the interface `lasd::Stack<Data>` and implemented by `lasd::Stack
         *   Complexity: O(N)
         *   Explanation: Needs to deallocate all nodes in the list.
 
-### 5.2. `StackVec<Data>` (Stack implemented with `Vector`)
+### 6.2. `StackVec<Data>` (Stack implemented with `Vector`)
 
 *   **Description**: Uses a vector to store elements, with dynamic resizing. The end of the vector serves as the top of the stack.
 *   **Key Operations & Complexity**:
@@ -168,14 +245,14 @@ Represented by the interface `lasd::Stack<Data>` and implemented by `lasd::Stack
         *   Complexity: O(1)
         *   Explanation: Creates a new vector and resets the size counter.
 
-## 6. Queue (FIFO)
+## 7. Queue (FIFO)
 
 Represented by the interface `lasd::Queue<Data>` and implemented by `lasd::QueueLst<Data>` (using `List`) and `lasd::QueueVec<Data>` (using `Vector`).
 
 *   **Description**: A First-In-First-Out (FIFO) data structure where elements are inserted at one end (rear/tail) and removed from the other end (front/head). The first element added to the queue will be the first one to be removed.
 *   **Key Operations & Complexity**:
 
-### 6.1. `QueueLst<Data>` (Queue implemented with `List`)
+### 7.1. `QueueLst<Data>` (Queue implemented with `List`)
 
 *   **Description**: Uses a doubly linked list to store elements. Elements are enqueued at the tail and dequeued from the head, providing efficient operations at both ends.
 *   **Key Operations & Complexity**:
@@ -195,7 +272,7 @@ Represented by the interface `lasd::Queue<Data>` and implemented by `lasd::Queue
         *   Complexity: O(N)
         *   Explanation: Needs to deallocate all nodes in the list.
 
-### 6.2. `QueueVec<Data>` (Queue implemented with `Vector`)
+### 7.2. `QueueVec<Data>` (Queue implemented with `Vector`)
 
 *   **Description**: Uses a circular buffer implemented with a vector to store elements. This approach allows efficient enqueue and dequeue operations without constantly shifting elements.
 *   **Key Operations & Complexity**:
@@ -220,7 +297,7 @@ Represented by the interface `lasd::Queue<Data>` and implemented by `lasd::Queue
     *   Physical index calculation: `(head + logical_index) % vector_capacity` converts logical positions to actual array indices.
     *   Dynamic resizing strategy: typically grows by doubling when full, and shrinks when usage falls below a threshold (e.g., 25% of capacity).
 
-## 7. Priority Queue (PQ)
+## 8. Priority Queue (PQ)
 
 Represented by the interface `lasd::PQ<Data>` and implemented by `lasd::PQHeap<Data>` (using `HeapVec`).
 

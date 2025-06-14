@@ -31,6 +31,12 @@ A C++ project implementing a collection of fundamental data structures and algor
         *   `Set<Data>` (interface)
         *   `SetVec<Data>`: Set implemented using a `SortableVector`.
         *   `SetLst<Data>`: Set implemented using a `List`.
+    *   **Binary Tree**: Tree data structure with at most two children per node.
+        *   `BinaryTree<Data>` (interface)
+        *   `MutableBinaryTree<Data>` (interface)
+        *   `BinaryTreeVec<Data>`: Binary tree implemented using a `Vector`.
+        *   `BinaryTreeLnk<Data>`: Binary tree implemented using nodes with pointers.
+        *   Various iterator types including pre-order, post-order, in-order, and breadth-first traversals.
     *   **Heap**: Max-heap data structure.
         *   `Heap<Data>` (interface, requires `std::totally_ordered<Data>`)
         *   `HeapVec<Data>`: Heap implemented using a `SortableVector`.
@@ -51,15 +57,25 @@ A C++ project implementing a collection of fundamental data structures and algor
 
 ```
 /
+├── binarytree/     # Binary tree implementations
+│   ├── lnk/        # Node-based binary tree
+│   └── vec/        # Vector-based binary tree
 ├── container/      # Core container interfaces and implementations
 ├── heap/           # Heap data structure implementation
 │   └── vec/        # Vector-based heap
+├── iterator/       # Iterator interfaces for traversing data structures
 ├── list/           # Linked list implementation
 ├── pq/             # Priority Queue interface and implementations
 │   └── heap/       # Heap-based priority queue
+├── queue/          # Queue interface and implementations
+│   ├── lst/        # List-based queue
+│   └── vec/        # Vector-based queue
 ├── set/            # Set interface and implementations
 │   ├── lst/        # List-based set
 │   └── vec/        # Vector-based set
+├── stack/          # Stack interface and implementations
+│   ├── lst/        # List-based stack
+│   └── vec/        # Vector-based stack
 ├── vector/         # Vector (dynamic array) implementation
 ├── zlasdtest/      # Provided test suite
 ├── zmytest/        # Custom test suite

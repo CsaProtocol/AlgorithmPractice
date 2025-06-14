@@ -72,8 +72,8 @@ This project aims to be a comprehensive practice ground for C++ and DSA. Here ar
 
 *   **Trees**:
     *   Binary Search Tree (BST)
-        *   Basic operations (insert, delete, search, min, max, predecessor, successor)
-        *   Traversals (in-order, pre-order, post-order, level-order)
+        *   Implementation as a specialization of the `BinaryTree` interface
+        *   Specific operations (insert, delete, search, min, max, predecessor, successor)
     *   Self-Balancing Trees:
         *   AVL Tree
         *   Red-Black Tree
@@ -94,6 +94,10 @@ This project aims to be a comprehensive practice ground for C++ and DSA. Here ar
 
 ### Enhancements to Existing Structures
 
+*   **Binary Trees**:
+    *   Additional traversal methods
+    *   Search operations
+    *   More specialized tree implementations (BST, AVL, etc.)
 *   **Iterators**:
     *   Implement more comprehensive iterator support for all containers (e.g., reverse iterators, const iterators where missing).
     *   Ensure compliance with C++ iterator concepts.

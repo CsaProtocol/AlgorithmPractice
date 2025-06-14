@@ -6,10 +6,9 @@
 #include "./exercise2b/test.hpp"
 
 #include "./exercise3a/test.hpp"
+#include "./exercise3b/test.hpp"
 
 /* ************************************************************************** */
-
-#include "exercise3a/test.hpp"
 
 #include <iostream>
 
@@ -64,8 +63,6 @@ void lasdtest() {
   cout << endl << "Exercise 2 (Simple Test) (Errors/Tests: " << stesterr << "/" << stestnum << ")";
   cout << endl << "Exercise 2 (Full Test) (Errors/Tests: " << ftesterr << "/" << ftestnum << ")" << endl;
 
-  cout << endl << "Goodbye!" << endl;
-
   stestnum = 0; stesterr = 0; ftestnum = 0; ftesterr = 0;
 
   loctestnum = 0; loctesterr = 0;
@@ -74,10 +71,23 @@ void lasdtest() {
 
   loctestnum = 0; loctesterr = 0;
   testFullExercise3A(loctestnum, loctesterr);
-  stestnum += loctestnum; stesterr += loctesterr;
+  ftestnum += loctestnum; ftesterr += loctesterr;
 
   cout << endl << "Exercise 3A (Simple Test) (Errors/Tests: " << stesterr << "/" << stestnum << ")";
   cout << endl << "Exercise 3A (Full Test) (Errors/Tests: " << ftesterr << "/" << ftestnum << ")" << endl;
+
+  stestnum = 0; stesterr = 0; ftestnum = 0; ftesterr = 0;
+
+  loctestnum = 0; loctesterr = 0;
+  testSimpleExercise3B(loctestnum, loctesterr);
+  stestnum += loctestnum; stesterr += loctesterr;
+
+  loctestnum = 0; loctesterr = 0;
+  testFullExercise3B(loctestnum, loctesterr);
+  ftestnum += loctestnum; ftesterr += loctesterr;
+
+  cout << endl << "Exercise 3B (Simple Test) (Errors/Tests: " << stesterr << "/" << stestnum << ")";
+  cout << endl << "Exercise 3B (Full Test) (Errors/Tests: " << ftesterr << "/" << ftestnum << ")" << endl;
 
   cout << endl << "Goodbye!" << endl;
 }

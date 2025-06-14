@@ -1,4 +1,3 @@
-
 #ifndef MAPPABLE_HPP
 #define MAPPABLE_HPP
 
@@ -31,7 +30,7 @@ public:
   bool operator==(const MappableContainer&) const noexcept = delete;
   inline bool operator!=(const MappableContainer&) const noexcept = delete;
 
-  using MapFun = std::function<void(Data &)>;
+  using MapFun = std::function<void(Data&)>;
   virtual void Map(MapFun) = 0;
 
 };
@@ -128,11 +127,11 @@ public:
   BreadthMappableContainer() = default;
   ~BreadthMappableContainer() override = default;
 
-  BreadthMappableContainer & operator=(const BreadthMappableContainer &) = delete;
-  BreadthMappableContainer & operator=(BreadthMappableContainer &&) noexcept = delete;
+  BreadthMappableContainer& operator=(const BreadthMappableContainer&) = delete;
+  BreadthMappableContainer& operator=(BreadthMappableContainer&&) noexcept = delete;
 
-  bool operator==(const BreadthMappableContainer &) const noexcept = delete;
-  bool operator!=(const BreadthMappableContainer &) const noexcept = delete;
+  bool operator==(const BreadthMappableContainer&) const noexcept = delete;
+  bool operator!=(const BreadthMappableContainer&) const noexcept = delete;
 
   using typename MappableContainer<Data>::MapFun;
   virtual void BreadthMap(MapFun) = 0;

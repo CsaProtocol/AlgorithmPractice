@@ -5,6 +5,13 @@ namespace lasd {
 
 template<typename Data>
     requires std::totally_ordered<Data>
+HeapVec<Data>::HeapVec() {
+    vec = new SortableVector<Data>(defaultHeapVecSize);
+    size = 0;
+}
+
+template<typename Data>
+    requires std::totally_ordered<Data>
 HeapVec<Data>::HeapVec(const TraversableContainer<Data>& container) {
     vec = new SortableVector<Data>(container);
     size = container.Size();
@@ -14,8 +21,8 @@ HeapVec<Data>::HeapVec(const TraversableContainer<Data>& container) {
 template<typename Data>
     requires std::totally_ordered<Data>
 HeapVec<Data>::HeapVec(MappableContainer<Data>&& container) noexcept {
-    vec = new SortableVector<Data>(std::move(container));
     size = container.Size();
+    vec = new SortableVector<Data>(std::move(container));
     HeapVec::Heapify();
 }
 
@@ -90,7 +97,7 @@ void HeapVec<Data>::Clear() {
 template<typename Data>
     requires std::totally_ordered<Data>
 const Data& HeapVec<Data>::operator[](unsigned long index) const {
-    if (index >= size) {
+    if (index >= size || vec == nullptr) {
         throw std::out_of_range("Index out of range");
     }
     return vec->operator[](index);

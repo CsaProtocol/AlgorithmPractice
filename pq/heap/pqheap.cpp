@@ -1,14 +1,10 @@
-
 namespace lasd {
 
 /* ************************************************************************** */
 
 template<typename Data>
     requires std::totally_ordered<Data>
-PQHeap<Data>::PQHeap() {
-    vec = new SortableVector<Data>;
-    size = 0;
-}
+PQHeap<Data>::PQHeap() : HeapVec<Data>() {}
 
 template<typename Data>
     requires std::totally_ordered<Data>
@@ -56,7 +52,7 @@ template<typename Data>
     requires std::totally_ordered<Data>
 const Data& PQHeap<Data>::Tip() const {
     if (size == 0) {
-        throw std::length_error("Heap is empty");
+        throw std::length_error("Operation failed: Cannot retrieve tip from an empty heap");
     }
     return vec->operator[](0);
 }
@@ -65,7 +61,7 @@ template<typename Data>
     requires std::totally_ordered<Data>
 void PQHeap<Data>::RemoveTip() {
     if (size == 0) {
-        throw std::length_error("Heap is empty");
+        throw std::length_error("Operation failed: Cannot remove tip from an empty heap");
     }
     RemoveTipAux();
 }
@@ -74,7 +70,7 @@ template<typename Data>
     requires std::totally_ordered<Data>
 Data PQHeap<Data>::TipNRemove() {
     if(size == 0) {
-        throw std::length_error("Heap is empty");
+        throw std::length_error("Operation failed: Cannot retrieve and remove tip from an empty heap");
     }
     Data tip = vec->operator[](0);
     RemoveTipAux();
@@ -97,7 +93,7 @@ template<typename Data>
     requires std::totally_ordered<Data>
 void PQHeap<Data>::Change(unsigned long index, const Data& value) {
     if(index >= size) {
-        throw std::out_of_range("Index out of range");
+        throw std::out_of_range("Operation failed: Provided index exceeds heap boundaries");
     }
     Data oldValue = vec->operator[](index);
     vec->operator[](index) = value;
@@ -112,7 +108,7 @@ template<typename Data>
     requires std::totally_ordered<Data>
 void PQHeap<Data>::Change(unsigned long index, Data&& value) {
     if(index >= size) {
-        throw std::out_of_range("Index out of range");
+        throw std::out_of_range("Operation failed: Provided index exceeds heap boundaries");
     }
     Data oldValue = vec->operator[](index);
     std::swap(vec->operator[](index), value);

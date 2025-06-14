@@ -32,7 +32,7 @@ public:
   QueueVec(const QueueVec&);
   QueueVec(QueueVec&&) noexcept;
 
-  ~QueueVec() override = default;
+  ~QueueVec() override;
 
   QueueVec& operator=(const QueueVec&);
   QueueVec& operator=(QueueVec&&) noexcept;

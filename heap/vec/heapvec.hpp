@@ -24,7 +24,7 @@ protected:
 
 public:
 
-  HeapVec() = default;
+  HeapVec();
   HeapVec(const TraversableContainer<Data>&);
   HeapVec(MappableContainer<Data>&&) noexcept;
 
