@@ -41,5 +41,7 @@ Thumbs.db
 
 # Other
 output.txt
-
-/binarytree
+graph/graph.cpp
+graph/graph.hpp
+graph/lst/graphadjlst.cpp
+graph/lst/graphadjlst.hpp
