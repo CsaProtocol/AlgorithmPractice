@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "../pq/heap/pqheap.hpp"
 #include "heap/heapvec.hpp"
 #include "linear/linear.hpp"
 #include "linear/list/list.hpp"
@@ -80,5 +81,6 @@ namespace zmytest {
         std::cout << "\nAll tests completed!" << std::endl;
         std::cout << std::endl << "Personal tests (Passed/Errors/Tests: " << testpass << "/" << testerr << "/" << testnum << ")" << std::endl;
         std::cout << "----------------------------------------" << std::endl;
+
     }
 }

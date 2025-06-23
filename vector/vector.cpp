@@ -1,4 +1,3 @@
-
 namespace lasd {
 
 /* ************************************************************************** */
@@ -14,7 +13,7 @@ Vector<Data>::Vector(const TraversableContainer<Data>& toCopy) : Vector(toCopy.S
     this->size = toCopy.Size();
     unsigned long i = 0;
     toCopy.Traverse([this, &i](const Data& value){
-            (this->elements)[i] = value; i++;
+        (this->elements)[i] = value; i++;
     });
 }
 
@@ -156,17 +155,11 @@ SortableVector<Data>::SortableVector(const SortableVector& toCopy) : Vector<Data
 
 template<typename Data>
     requires std::totally_ordered<Data>
-SortableVector<Data>::SortableVector(SortableVector&& toMove) noexcept {
-    std::swap(this->size, toMove.size);
-    std::swap(this->elements, toMove.elements);
-}
+SortableVector<Data>::SortableVector(SortableVector&& toMove) noexcept : Vector<Data>(std::move(toMove)) {}
 
 template <typename Data>
     requires std::totally_ordered<Data>
-SortableVector<Data>::~SortableVector() {
-    delete[] this->elements;
-    this->elements = nullptr;
-}
+SortableVector<Data>::~SortableVector() {}
 
 template<typename Data>
     requires std::totally_ordered<Data>
@@ -181,8 +174,10 @@ SortableVector<Data>& SortableVector<Data>::operator=(const SortableVector& toCo
 template <typename Data>
     requires std::totally_ordered<Data>
 SortableVector<Data>& SortableVector<Data>::operator=(SortableVector&& toMove) noexcept {
-    std::swap(this->size, toMove.size);
-    std::swap(this->elements, toMove.elements);
+    if(this != &toMove) {
+        std::swap(this->size, toMove.size);
+        std::swap(this->elements, toMove.elements);
+    }
     return *this;
 }
 
