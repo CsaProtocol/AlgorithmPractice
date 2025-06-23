@@ -134,6 +134,7 @@ void HeapVec<Data>::Heapify() {
 template<typename Data>
     requires std::totally_ordered<Data>
 void HeapVec<Data>::Sort() noexcept {
+    Heapify();
     HeapSort();
 }
 
