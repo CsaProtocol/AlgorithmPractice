@@ -53,6 +53,7 @@ public:
   inline Data& Back() override;
 
   void Resize(unsigned long) override;
+  void Fill(const Data&);
   void Clear() override;
 
 };

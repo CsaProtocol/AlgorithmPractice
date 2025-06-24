@@ -129,6 +129,13 @@ void Vector<Data>::Resize(unsigned long newSize) {
 }
 
 template<typename Data>
+void Vector<Data>::Fill(const Data& value) {
+    for(unsigned long i = 0; i < this->Size(); i++) {
+        this->elements[i] = value;
+    }
+}
+
+template<typename Data>
 void Vector<Data>::Clear() {
     delete[] elements;
     elements = nullptr;

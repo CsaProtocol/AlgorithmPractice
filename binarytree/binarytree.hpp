@@ -158,7 +158,7 @@ protected:
 
 public:
 
-  BTPreOrderIterator(const BinaryTree<Data> & bt) {
+  explicit BTPreOrderIterator(const BinaryTree<Data> & bt) {
     if (bt.Size() != 0) {
       stk.Push(root = &bt.Root());
     }
@@ -173,14 +173,16 @@ public:
   ~BTPreOrderIterator() override = default;
 
   BTPreOrderIterator& operator=(const BTPreOrderIterator& toCopy) {
-    root = toCopy.root;
-    stk = toCopy.stk;
-    return *this;
+    if(this != &toCopy) {
+      root = toCopy.root;
+      stk = toCopy.stk;
+    } return *this;
   }
   BTPreOrderIterator& operator=(BTPreOrderIterator&& toMove) noexcept {
-    std::swap(root, toMove.root);
-    std::swap(stk, toMove.stk);
-    return *this;
+    if(this != &toMove) {
+      std::swap(root, toMove.root);
+      std::swap(stk, toMove.stk);
+    } return *this;
   }
 
   inline bool operator==(const BTPreOrderIterator& toCompare) const noexcept {
@@ -231,7 +233,7 @@ protected:
 
 public:
 
-  BTPreOrderMutableIterator(MutableBinaryTree<Data> & bt) : BTPreOrderIterator<Data>(bt) {};
+  explicit BTPreOrderMutableIterator(MutableBinaryTree<Data> & bt) : BTPreOrderIterator<Data>(bt) {};
 
   BTPreOrderMutableIterator(const BTPreOrderMutableIterator& itr) : BTPreOrderIterator<Data>(itr) {};
   BTPreOrderMutableIterator(BTPreOrderMutableIterator&& itr) noexcept : BTPreOrderIterator<Data>(std::move(itr)) {};
@@ -284,14 +286,16 @@ public:
   ~BTPostOrderIterator() override = default;
 
   BTPostOrderIterator& operator=(const BTPostOrderIterator& toCopy) {
-    root = toCopy.root;
-    stk = toCopy.stk;
-    return *this;
+    if(this != &toCopy) {
+      root = toCopy.root;
+      stk = toCopy.stk;
+    } return *this;
   }
   BTPostOrderIterator& operator=(BTPostOrderIterator&& toMove) noexcept {
-    std::swap(root, toMove.root);
-    std::swap(stk, toMove.stk);
-    return *this;
+    if(this != &toMove) {
+      std::swap(root, toMove.root);
+      std::swap(stk, toMove.stk);
+    } return *this;
   }
 
   inline bool operator==(const BTPostOrderIterator& toCompare) const noexcept {
@@ -334,7 +338,7 @@ public:
 protected:
 
   void SearchLeftMostLeaf() {
-    const typename BinaryTree<Data>::Node * curr;
+    const typename BinaryTree<Data>::Node* curr;
     while (true) {
       while ((curr = stk.Top())->HasLeftChild()) {
         stk.Push(&curr->LeftChild());
@@ -360,7 +364,7 @@ protected:
 
 public:
 
-  BTPostOrderMutableIterator(MutableBinaryTree<Data>& bt) : BTPostOrderIterator<Data>(bt) {};
+  explicit BTPostOrderMutableIterator(MutableBinaryTree<Data>& bt) : BTPostOrderIterator<Data>(bt) {};
 
   BTPostOrderMutableIterator(const BTPostOrderMutableIterator& itr) : BTPostOrderIterator<Data>(itr) {};
   BTPostOrderMutableIterator(BTPostOrderMutableIterator&& itr) noexcept : BTPostOrderIterator<Data>(std::move(itr)) {};
@@ -397,7 +401,7 @@ protected:
 
 public:
 
-  BTInOrderIterator(const BinaryTree<Data>& bt) {
+  explicit BTInOrderIterator(const BinaryTree<Data>& bt) {
     if (bt.Size() != 0) {
       stk.Push(root = &bt.Root());
       SearchLeftMostNode();
@@ -413,14 +417,16 @@ public:
   ~BTInOrderIterator() override = default;
 
   BTInOrderIterator& operator=(const BTInOrderIterator& toCopy) {
-    root = toCopy.root;
-    stk = toCopy.stk;
-    return *this;
+    if(this != &toCopy) {
+      root = toCopy.root;
+      stk = toCopy.stk;
+    } return *this;
   }
   BTInOrderIterator& operator=(BTInOrderIterator&& toMove) noexcept {
-    std::swap(root, toMove.root);
-    std::swap(stk, toMove.stk);
-    return *this;
+    if(this != &toMove) {
+      std::swap(root, toMove.root);
+      std::swap(stk, toMove.stk);
+    } return *this;
   }
 
   inline bool operator==(const BTInOrderIterator& toCompare) const noexcept {
@@ -482,7 +488,7 @@ protected:
 
 public:
 
-  BTInOrderMutableIterator(MutableBinaryTree<Data>& bt) : BTInOrderIterator<Data>(bt) {};
+  explicit BTInOrderMutableIterator(MutableBinaryTree<Data>& bt) : BTInOrderIterator<Data>(bt) {};
 
   BTInOrderMutableIterator(const BTInOrderMutableIterator& itr) : BTInOrderIterator<Data>(itr) {};
   BTInOrderMutableIterator(BTInOrderMutableIterator&& itr) noexcept : BTInOrderIterator<Data>(std::move(itr)) {};
@@ -519,7 +525,7 @@ protected:
 
 public:
 
-  BTBreadthIterator(const BinaryTree<Data>& bt) {
+  explicit BTBreadthIterator(const BinaryTree<Data>& bt) {
     if(bt.Size() != 0) {
       que.Enqueue(root = &bt.Root());
     }
@@ -534,9 +540,10 @@ public:
   ~BTBreadthIterator() override = default;
 
   BTBreadthIterator& operator=(const BTBreadthIterator& toCopy) {
-    root = toCopy.root;
-    que = toCopy.que;
-    return *this;
+    if(this != &toCopy) {
+      root = toCopy.root;
+      que = toCopy.que;
+    } return *this;
   }
   BTBreadthIterator& operator=(BTBreadthIterator&& toMove) noexcept {
     std::swap(root, toMove.root);
@@ -593,7 +600,7 @@ protected:
 
 public:
 
-  BTBreadthMutableIterator(MutableBinaryTree<Data>& bt) : BTBreadthIterator<Data>(bt) {};
+  explicit BTBreadthMutableIterator(MutableBinaryTree<Data>& bt) : BTBreadthIterator<Data>(bt) {};
 
   BTBreadthMutableIterator(const BTBreadthMutableIterator& toCopy) : BTBreadthIterator<Data>(toCopy) {};
   BTBreadthMutableIterator(BTBreadthMutableIterator&& toMove) noexcept : BTBreadthIterator<Data>(std::move(toMove)) {};

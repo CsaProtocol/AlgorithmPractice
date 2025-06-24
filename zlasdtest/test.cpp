@@ -19,6 +19,7 @@ using namespace std;
 void lasdtest() {
   cout << endl << "~*~#~*~ Welcome to the LASD Test Suite ~*~#~*~ " << endl;
 
+  uint tottestnum = 0, tottesterr = 0;
   uint loctestnum, loctesterr;
   uint stestnum = 0, stesterr = 0;
   uint ftestnum = 0, ftesterr = 0;
@@ -41,6 +42,7 @@ void lasdtest() {
 
   cout << endl << "Exercise 1 (Simple Test) (Errors/Tests: " << stesterr << "/" << stestnum << ")";
   cout << endl << "Exercise 1 (Full Test) (Errors/Tests: " << ftesterr << "/" << ftestnum << ")" << endl;
+  tottesterr += ftesterr + stesterr; tottestnum += ftestnum + stestnum;
 
   stestnum = 0; stesterr = 0; ftestnum = 0; ftesterr = 0;
 
@@ -62,6 +64,7 @@ void lasdtest() {
 
   cout << endl << "Exercise 2 (Simple Test) (Errors/Tests: " << stesterr << "/" << stestnum << ")";
   cout << endl << "Exercise 2 (Full Test) (Errors/Tests: " << ftesterr << "/" << ftestnum << ")" << endl;
+  tottesterr += ftesterr + stesterr; tottestnum += ftestnum + stestnum;
 
   stestnum = 0; stesterr = 0; ftestnum = 0; ftesterr = 0;
 
@@ -75,6 +78,7 @@ void lasdtest() {
 
   cout << endl << "Exercise 3A (Simple Test) (Errors/Tests: " << stesterr << "/" << stestnum << ")";
   cout << endl << "Exercise 3A (Full Test) (Errors/Tests: " << ftesterr << "/" << ftestnum << ")" << endl;
+  tottesterr += ftesterr + stesterr; tottestnum += ftestnum + stestnum;
 
   stestnum = 0; stesterr = 0; ftestnum = 0; ftesterr = 0;
 
@@ -88,6 +92,9 @@ void lasdtest() {
 
   cout << endl << "Exercise 3B (Simple Test) (Errors/Tests: " << stesterr << "/" << stestnum << ")";
   cout << endl << "Exercise 3B (Full Test) (Errors/Tests: " << ftesterr << "/" << ftestnum << ")" << endl;
+  tottesterr += ftesterr + stesterr; tottestnum += ftestnum + stestnum;
+
+  cout << endl << "Total Test (Full Test + Simple Test) (Errors/Tests: " << tottesterr << "/" << tottestnum << ")" << endl;
 
   cout << endl << "Goodbye!" << endl;
 }
