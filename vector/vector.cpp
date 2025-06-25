@@ -1,3 +1,4 @@
+
 namespace lasd {
 
 /* ************************************************************************** */
@@ -67,14 +68,16 @@ Vector<Data>& Vector<Data>::operator=(Vector&& toMove) noexcept {
 
 template<typename Data>
 bool Vector<Data>::operator==(const Vector& toCompare) const noexcept {
+    if(this == &toCompare) return true; // Self-comparison optimization
+
     if(this->size != toCompare.Size())
         return false;
+
     if(this->Empty() && toCompare.Empty())
         return true;
-    for(unsigned long i = 0; i < this->Size(); i++) {
-        if(this->elements[i] != toCompare.elements[i])
-            return false;
-    } return true;
+
+    // Use std::equal for potentially better performance than manual loop
+    return std::equal(this->elements, this->elements + this->size, toCompare.elements);
 }
 
 template<typename Data>
@@ -120,19 +123,28 @@ Data& Vector<Data>::Back() {
 
 template <typename Data>
 void Vector<Data>::Resize(unsigned long newSize) {
+    if (newSize == 0) {
+        Clear();
+        return;
+    }
+
+    if (newSize == size)
+        return;
+
     Data* newElements = new Data[newSize];
     const unsigned long minSize = std::min(this->size, newSize);
-    std::copy(elements, elements + minSize, newElements);
+    if (elements != nullptr && minSize > 0) {
+        std::move(elements, elements + minSize, newElements);
+    }
+
     delete[] elements;
-    std::swap(elements, newElements);
+    elements = newElements;
     this->size = newSize;
 }
 
 template<typename Data>
 void Vector<Data>::Fill(const Data& value) {
-    for(unsigned long i = 0; i < this->Size(); i++) {
-        this->elements[i] = value;
-    }
+    std::fill_n(this->elements, this->Size(), value);
 }
 
 template<typename Data>
