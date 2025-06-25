@@ -102,18 +102,23 @@ void MutableLinearContainer<Data>::PostOrderMap(MapFun functor){
 template<typename Data>
     requires std::totally_ordered<Data>
 void SortableLinearContainer<Data>::Sort() noexcept {
+    if(this->Empty()) {
+        return;
+    }
     SelectionSort();
 }
 
 template<typename Data>
     requires std::totally_ordered<Data>
 void SortableLinearContainer<Data>::SelectionSort() {
-    for(unsigned long current = 0; current < this->size; current++) {
-        for(unsigned long i = current; i < this->size; i++) {
-            if(this->operator[](i) < this->operator[](current)) {
-                std::swap(this->operator[](i), this->operator[](current));
+    for(unsigned long current = 0; current < this->size - 1; current++) {
+        int minIndex = current;
+        for(unsigned long i = current + 1; i < this->size; i++) {
+            if(this->operator[](i) < this->operator[](minIndex)) {
+                minIndex = i;
             }
         }
+        std::swap(this->operator[](current), this->operator[](minIndex));
     }
 }
 

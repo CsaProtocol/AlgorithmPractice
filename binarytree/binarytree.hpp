@@ -270,7 +270,7 @@ protected:
 
 public:
 
-  BTPostOrderIterator(const BinaryTree<Data> & bt) {
+  explicit BTPostOrderIterator(const BinaryTree<Data> & bt) {
     if (bt.Size() != 0) {
       stk.Push(root = &bt.Root());
       SearchLeftMostLeaf();
@@ -311,7 +311,7 @@ public:
     } return stk.Top()->Element();
   }
 
-  bool Terminated() const noexcept override {
+  [[nodiscard]] bool Terminated() const noexcept override {
     return stk.Empty();
   }
 
@@ -323,7 +323,7 @@ public:
         stk.Push(&top.RightChild());
         SearchLeftMostLeaf();
       }
-    };
+    }
     return *this;
   }
 
@@ -442,7 +442,7 @@ public:
     } return stk.Top()->Element();
   }
 
-  bool Terminated() const noexcept override {
+  [[nodiscard]] bool Terminated() const noexcept override {
     return stk.Empty();
   }
 
