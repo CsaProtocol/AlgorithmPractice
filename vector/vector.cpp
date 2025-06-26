@@ -68,7 +68,8 @@ Vector<Data>& Vector<Data>::operator=(Vector&& toMove) noexcept {
 
 template<typename Data>
 bool Vector<Data>::operator==(const Vector& toCompare) const noexcept {
-    if(this == &toCompare) return true; // Self-comparison optimization
+    if(this == &toCompare)
+        return true;
 
     if(this->size != toCompare.Size())
         return false;
@@ -76,7 +77,6 @@ bool Vector<Data>::operator==(const Vector& toCompare) const noexcept {
     if(this->Empty() && toCompare.Empty())
         return true;
 
-    // Use std::equal for potentially better performance than manual loop
     return std::equal(this->elements, this->elements + this->size, toCompare.elements);
 }
 

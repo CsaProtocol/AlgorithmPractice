@@ -73,11 +73,7 @@ bool HeapVec<Data>::operator==(const HeapVec& other) const noexcept {
     if(this->size != other.size) {
         return false;
     }
-    for(unsigned long i = 0; i < size; ++i) {
-        if(vec->operator[](i) != other.vec->operator[](i)) {
-            return false;
-        }
-    } return true;
+    return *vec == *(other.vec);
 }
 
 template<typename Data>
